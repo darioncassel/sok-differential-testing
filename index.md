@@ -11,19 +11,19 @@ There have been a diverse array of attemps at discovering bugs in implementation
 2. Determine essential features of each class and what kind of bug that feature can capture
 3. Determine the 'coverage' of these classes; are there types of bugs that will not be caught by any approach?
 
-#### Papers that have testing tools:
-- David Kaloper-Mersinjak, Hannes Mehnert, Anil Madhavapeddy and Peter Sewell. Not-quite-so-broken TLS: lessons in re-engineering a security protocol specification and implementation. USENIX Security 2015. [PDF](https://tlseminar.github.io/docs/nqsbtls.pdf)[Site](https://nqsb.io/)
+### Papers
+1. David Kaloper-Mersinjak, Hannes Mehnert, Anil Madhavapeddy and Peter Sewell. Not-quite-so-broken TLS: lessons in re-engineering a security protocol specification and implementation. USENIX Security 2015. [PDF](https://tlseminar.github.io/docs/nqsbtls.pdf) [Site](https://nqsb.io/)
   - Presents nqsb-TLS, code that is a specification of TLS, executable as a test oracle to check conformance of trances from arbitrary implementations.
 
-- Suman Jana, Yuan Kang, Samuel Roth, and Baishakhi Ray. Automatically Detecting Error Handling Bugs using Error Specifications. USENIX Security 2016. [PDF](https://tlseminar.github.io/docs/epex.pdf)[GitHub](https://github.com/yujokang/EPEx)
+2. Suman Jana, Yuan Kang, Samuel Roth, and Baishakhi Ray. Automatically Detecting Error Handling Bugs using Error Specifications. USENIX Security 2016. [PDF](https://tlseminar.github.io/docs/epex.pdf) [GitHub](https://github.com/yujokang/EPEx)
   - Presents EPEx, a tool that uses error specifications to identify and symbolically explore different error paths
 
-- Chad Brubaker, Suman Jana, Baishakhi Ray, Sarfraz Khurshid, Vitaly Shmatikov. Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations. IEEE Symposium on Security and Privacy (Oakland) 2014. [PDF](https://tlseminar.github.io/docs/frankencerts.pdf)[GitHub](https://github.com/sumanj/frankencert)
+3. Chad Brubaker, Suman Jana, Baishakhi Ray, Sarfraz Khurshid, Vitaly Shmatikov. Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations. IEEE Symposium on Security and Privacy (Oakland) 2014. [PDF](https://tlseminar.github.io/docs/frankencerts.pdf) [GitHub](https://github.com/sumanj/frankencert)
   - Presents Frankencert, a tool for adversarial testing of certificate validation in SSL/TLS implementations
 
-- Benjamin Beurdouche, Antoine Delignat-Lavaud, Nadim Kobeissi, Alfredo Pironti, Karthikeyan Bhargavan. FLEXTLS: A Tool for Testing TLS Implementations. USENIX Workshop on Offensive Technologies, 2015. [PDF](https://tlseminar.github.io/docs/flextls.pdf)
+4. Benjamin Beurdouche, Antoine Delignat-Lavaud, Nadim Kobeissi, Alfredo Pironti, Karthikeyan Bhargavan. FLEXTLS: A Tool for Testing TLS Implementations. USENIX Workshop on Offensive Technologies, 2015. [PDF](https://tlseminar.github.io/docs/flextls.pdf)
   - Presents FLEXTLS, a tool for scripting and prototyping TLS scenarios for testing TLS implementations.
  
-- Juraj Somorovsky. Systematic Fuzzing and Testing of TLS Libraries. 2016. [PDF](https://www.nds.rub.de/media/nds/veroeffentlichungen/2016/10/19/tls-attacker-ccs16.pdf)
+5. Juraj Somorovsky. Systematic Fuzzing and Testing of TLS Libraries. 2016. [PDF](https://www.nds.rub.de/media/nds/veroeffentlichungen/2016/10/19/tls-attacker-ccs16.pdf)
   - Presents TLS-Attacker, a framework for creating TLS message flows for fuzzing TLS servers
   
