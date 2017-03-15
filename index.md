@@ -1,37 +1,29 @@
-## Welcome to GitHub Pages
+## SoK: Software Testing Methods Applied to SSL/TLS: Lessons in Discovering Implementation Bugs
 
-You can use the [editor on GitHub](https://github.com/darioncassel/sok-differential-testing/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+### Team Members
+- Darion Cassel
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Motivation
+There have been a diverse array of attemps at discovering bugs in implementations of SSL/TLS. We would like to present a taxonomy of these attempts in order to better understand what their essential features are, what classes of bugs these features are likely to capture, and what classes of bugs are blind spots for this field.
 
-### Markdown
+### Plan
+1. Summarize and classify current approaches to bug detection for SSL/TLS
+2. Determine essential features of each class and what kind of bug that feature can capture
+3. Determine the 'coverage' of these classes; are there types of bugs that will not be caught by any approach?
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+#### Papers that have testing tools:
+- David Kaloper-Mersinjak, Hannes Mehnert, Anil Madhavapeddy and Peter Sewell. Not-quite-so-broken TLS: lessons in re-engineering a security protocol specification and implementation. USENIX Security 2015. [PDF](https://tlseminar.github.io/docs/nqsbtls.pdf)[Site](https://nqsb.io/)
+  - Presents nqsb-TLS, code that is a specification of TLS, executable as a test oracle to check conformance of trances from arbitrary implementations.
 
-```markdown
-Syntax highlighted code block
+- Suman Jana, Yuan Kang, Samuel Roth, and Baishakhi Ray. Automatically Detecting Error Handling Bugs using Error Specifications. USENIX Security 2016. [PDF](https://tlseminar.github.io/docs/epex.pdf)[GitHub](https://github.com/yujokang/EPEx)
+  - Presents EPEx, a tool that uses error specifications to identify and symbolically explore different error paths
 
-# Header 1
-## Header 2
-### Header 3
+- Chad Brubaker, Suman Jana, Baishakhi Ray, Sarfraz Khurshid, Vitaly Shmatikov. Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations. IEEE Symposium on Security and Privacy (Oakland) 2014. [PDF](https://tlseminar.github.io/docs/frankencerts.pdf)[GitHub](https://github.com/sumanj/frankencert)
+  - Presents Frankencert, a tool for adversarial testing of certificate validation in SSL/TLS implementations
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/darioncassel/sok-differential-testing/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+- Benjamin Beurdouche, Antoine Delignat-Lavaud, Nadim Kobeissi, Alfredo Pironti, Karthikeyan Bhargavan. FLEXTLS: A Tool for Testing TLS Implementations. USENIX Workshop on Offensive Technologies, 2015. [PDF](https://tlseminar.github.io/docs/flextls.pdf)
+  - Presents FLEXTLS, a tool for scripting and prototyping TLS scenarios for testing TLS implementations.
+ 
+- Juraj Somorovsky. Systematic Fuzzing and Testing of TLS Libraries. 2016. [PDF](https://www.nds.rub.de/media/nds/veroeffentlichungen/2016/10/19/tls-attacker-ccs16.pdf)
+  - Presents TLS-Attacker, a framework for creating TLS message flows for fuzzing TLS servers
+  
