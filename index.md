@@ -8,7 +8,7 @@ There have been a diverse array of attemps at discovering bugs in implementation
 
 ### Plan
 1. Summarize and classify current approaches to bug detection for SSL/TLS
-2. Determine essential features of each class and what kind of bug that feature can capture
+2. Determine essential features of each class and what kinds of bugs that feature can capture
 3. Determine the 'coverage' of these classes; are there types of bugs that will not be caught by any approach?
 
 ### Papers
