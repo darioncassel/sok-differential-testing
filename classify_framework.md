@@ -1,25 +1,3 @@
-### SoK: Software Testing Methods Applied to SSL/TLS: Lessons in Discovering Implementation Bugs
-
-Darion Cassel<sup>1</sup>, David Evans<sup>1</sup>
-
-<sup>1</sup>University of Virginia, Charlottesville, Virginia, USA
-<hr>
-
-#### Abstract
-
-TLS/SSL forms the backbone of secure communication on the Internet. Since its inception, TLS/SSL has been shown to be have a slew of vulnerabilities across its implementations that can lead to violation of its fundamental security properties. We classify current approaches to testing of TLS implementations according to broad classes of categorically-separated methodologies using pre-existing taxonomies developed in the field of software engineering. Furthermore, we assert that security protocol implementation vulnerabilities should be treated *differently* that traditional software faults because they are a violation of two levels of specification. On one level, they are exceptional state of some protocol implementation's state machine. On another level, they are a violation of a protocol model with the consequence of a violation of some security property that model intends to guarantee. We show that because of the separation of methodologies none of the current approaches work on both levels, but we believe that in order to discover a security fault *and* understand the implications of that fault without human intervention, an approach must be able to work on both levels. Finally, we present a cohesive workflow that combines two or more approaches in order to discover faults and classify their semantic threat concurrently.
-
-#### Methodology
-1. [x] Standardization of a framework for approach classification
-2. [ ] (On-going) Classification of current approaches within this framework
-3. [x] Standardization of a framework for result classification
-4. [ ] Classification of results within this framework
-5. [ ] Matrix of approaches x results
-6. [ ] Presentation of workflow combining two or more approaches
-7. [ ] (Time-permitting) Conterfactual testing of TLS as a baseline evaluation standard to enhance comparison
-
-#### Terminology and Approach Classification:
-
 1. Security testing verifies and validates software system requirements related to security properties like confidentiality, integrity, availability, authentication, authorization and nonrepudiation. 
 2. Types: 
     1. model-based security testing is grounded on requirements and design models created during the analysis and design phase 
@@ -162,6 +140,3 @@ TLS/SSL forms the backbone of secure communication on the Internet. Since its in
 
     4. Concolic testing [12, 1] 
         1. Combines symbolic execution (a static source code analysis technique) and dynamic testing.
-
-Information from [Survey of Security Testing](https://blogs.uni-paderborn.de/sse/files/2015/08/book_chapter_sectesting.pdf?file=2015/08/book_chapter_sectesting.pdf)
-
