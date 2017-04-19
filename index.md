@@ -79,7 +79,7 @@ The process for delivering application data using the record protocol is that th
 
 #### Software Security Testing Background and Definitions
 
-In a classical sense, *Software testing* consists of the dynamic verification that a program provides expected behaviors on a finite set of *test cases* called a *test suite*. Closely related is the notion of *dynamic testing* that evaluates software by observing its execution. On the other hand, *Static testing* checks *software development artifacts* (i.e requirements, design,or code) without the execution of these artifacts. Static testing is usually performed either through *manual reviews* or *automated analysis*.
+In a classical sense, *software testing* consists of the dynamic verification that a program provides expected behaviors on a finite set of *test cases* called a *test suite*. Closely related is the notion of *dynamic testing* that evaluates software by observing its execution. On the other hand, *Static testing* checks *software development artifacts* (i.e requirements, design,or code) without the execution of these artifacts. Static testing is usually performed either through *manual reviews* or *automated analysis*.
 
 After a particular test case is executed, the observed and intended behaviors of the *software under test* (SUT) are compared, resulting in a *verdict* that is either:
 - *Pass*: the behaviors conform
@@ -123,15 +123,48 @@ The *accessibility* of software development artifacts under test is a measure of
 - *White-box testing* uses test cases that are derived based on information about how the software has been designed or coded.
 - *Black-box etsting* uses test cases that rely only on the input/output behavior of the software is available. It is frequently used in security testing where testing is often done to mimic external attacks from an adversary.
 
-As noted, black-box testing does not require access to source code or other development artifacts of the SUT. Testing is typicall yperformed via interaction with the SUT using:
+As noted, black-box testing does not require access to source code or other development artifacts of the SUT. Testing is typically performed via interaction with the SUT using:
 - *Fuzzing*, which feeds random data to a program "until it crashes"
 - *Mutation-based fuzzing*, where the fuzzer has knowledge about the input format of the program under test, such as existing data samples.
 - *Generation-based fuzzing*, which uses a model of the input data for generating test data.
 - *Concolic testing*, which combines symbolic execution that is a static source code analysis technique with dynamic testing.
 
-#### Background on Protocol Verification
 
-- Protocol Verification background/definitions
+#### Background/Definitions on Protocol Verification
+
+*Abstract static anaysis* is the automatic computation of information about the behavior of a program without executing. This kind of analysis is usually used to compute *approximate* but *sound* conjectures about the behavior of a program. We say that are sound because they are guaranteeed to not be misleading.
+
+The analysis process is vulnerable to two kinds of errors:
+- *A spurious warning*, which is an error message about a fault that does not exist in the program.
+- *A missed bug*, which means that the analysis procedure did not reporte a fault that actually exists in the program. 
+
+We say that a program analysis method is *flow sensitive* if the order of execution of statements in the program is considered, *path sensitive* if the analysis distinguishes between paths through a program and attempts to only consider feasible ones, *context sentivie* if method calls are analyzed differently based on the call site, and *inter-procedural* if the bodies of method calls are also analyzed.
+
+Protocol verification usually makes use of the *software model checking* methodology. This consists of a *model* of the program, which is a set of *states*, such as the evaluation of the program counter, the values of program variables, and the configuration fo the stack and heap, and a set of *transitions* that describe how the programs moves from one state to another.
+
+In the context of model-checking, a *specification*, or *correctness property* is a literal logical formula of states and transitions. If a state violating a specification is found, a *counterexample*, which is an execution trace demonstrating the error, is produced.
+
+Thus, we say that a model checker can return one of three results:
+- *Pass*, indicating that the property is satisifed
+- *Fail*, indicating that the property is not satisifed and that a counterexample exists
+- *Inconclusive*, the model checker cannot compute verification in a "reasonable" amount of time
+
+Model checking tools verifiy *paritial specifications* that are classified as *safety*, which expresses the unreachability of bad states, and *liveness*, which specifies that a "good" state is eventually reached, such as a request to a webserver being served eventually.
+
+The principle problem with vanilla model checking is *state-space explosion*, which means that the state-space of a software program is exponential in terms of its various parameters such as the number of variables and the width of the datatypes.
+
+The state-space explosion is particularly a problem with *explicit-state model checking algorithms* that directly index states and use graph algorithms to explore the state space. Some efficiency may be gained by checking for property violation *on-the-fly* with new states, such that the entire graph does not have to be built to perform the analysis. Other improvements include the compression of explored states that are then stored in a hashtable to enture that their successors are not recomputed. Finally, *partial order reduction* is used to prune the state space exploration of concurrent programs.
+
+An alternative to explicit-state model checking algorithms is *symbolic model checking algorithms* that use implicit representations of sets of states. Common symbolic representations are 
+- *BDDs*, which are obtained from a *boolean decision tree* and permit boolean functional equivalence for efficient checking
+- *Propositional logic for finite sets*, whcih are more memory efficient at the cost of computation time
+- *Finite automata for infinite sets*
+
+Another alternative is *bounded model checking* (BMC). This technique involves "unwinding" the model under verification *k* times together with a property to form a propositional formula that is then passed to a SAT solver. The result of the test is viewed as a *pass* if and only if there is a trace of length *k* that refutes the property. The reult is viewed as *inconclusive* if the formula is unsatisfiable. The way BMC is implemented is to treat the entire program as one transiiton relation by adding a program counter variable to the model. One transition of the design corresponds to one basic block of the program. In each transition, the next program location is computed by following the control flow graph (CFG) of the program. The basic block is converted into a formula by transforming it into Static Single Assignment (SSA) form. The arithmetic operators in the basic block are converted into simplistic circuit equivalents. Arrays and pointers are treated as in the case of memories in hardware verification: a large case split over the possible values of the address is encoded.
+
+There is a level of care to be given to the models themselves. We say that a model of a protocol is a *symbolic model*, often called the Dolev-Yao Model is the cryptographic primities are represented by function symbols considered as black-boxes, messages are terms on these primities, the adversary is restricted to using these primitives, and the model assumes perfect cryptography. On the other hand, in the *computational model* messages are bitstrings, the cryptographic primitives are functions from bitstrings to bitstrings, the adversary is a probabilistic Turing machine, and a security property is considered to hold when the probability that it does not hold is negligible in the security parameter.
+
+Finally, we say that *trace properties* ar eproperties that can be defined on each execution trace of the protocol, and *equivalence properties* mean that an adversary cannot distinguish two processes.
 
 
 ### III. Methodology Classification 
