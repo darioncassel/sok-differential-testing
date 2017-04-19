@@ -66,7 +66,6 @@ Each X.509 certificate that the client receives from a server it is attempting t
 
 It is due to this complexity that the certificate validation phase of the TLS protocol is a hotbed of security vulnerabilities.
 
-
 *C. The Record Protocol*
 
 Similarly to TCP or IP, data that is exchanged within a TLS session is framed using a protocol. The record protocol allows for the identification of different types of messages, either handshake, alert, or data, via the *Content Type* field, and includes authentication of the encrypted data via a *message authentication code* (MAC).
@@ -75,7 +74,6 @@ Similarly to TCP or IP, data that is exchanged within a TLS session is framed us
 <sup>TLS Record Structure</sup></center>
 
 The process for delivering application data using the record protocol is that the data is divided into blocks of a maximum size of 16 KB. A MAC or HMAC is then added to each block and the data is encrypted using the ciphersuite that was negotiated during the handshake. Depending on the ciphersuite being used, padding might be added to the data. The reverse of this process is used by the client when it receives a frame of data.
-
 
 #### Software Security Testing Background and Definitions
 
@@ -96,6 +94,10 @@ A fault can be either:
 - A *vulnerability*, which is fault that is a *security flaw* and results in a violation of a security property.
 
 The meaning of vulnerability is one of two things, either the security mechanism necessary for protecting against that vulnerability is missing, or the security mechanism has been implemented in a faulty way.
+
+The *exceptional element* is an the input that provokes an undesirable behavior in the SUT. The exceptional element can violate a protocol specification or it can sometimes be a legal input that exploits an ambiguity in the specification.
+
+The *instrumentation* used to monitor the SUT can be divided into two categories, *out-of-band instrumentation*, such as debuggers, and *in-band instrumentation*, which is added to the program via the test *injection vector*, the same interface used to give the test case to the SUT.
 
 *Security testing* verifies and validates software system requirements related to security properties. Typical security properties under test are:
 - *Confidentiality*, which is the assurance that information is not disclosed to unauthorized individuals, processes, or devices
@@ -128,7 +130,6 @@ As noted, black-box testing does not require access to source code or other deve
 - *Mutation-based fuzzing*, where the fuzzer has knowledge about the input format of the program under test, such as existing data samples.
 - *Generation-based fuzzing*, which uses a model of the input data for generating test data.
 - *Concolic testing*, which combines symbolic execution that is a static source code analysis technique with dynamic testing.
-
 
 #### Background/Definitions on Protocol Verification
 
@@ -168,7 +169,71 @@ Finally, we say that *trace properties* are properties that can be defined on ea
 
 
 ### III. Methodology Classification 
-- Classification of approaches
+
+We shall be looking at the following approaches *Finite-State Analysis of SSL 3.0*, *Not-quite-so broken TLS*, *Frankencerts*, *FLEXTLS*, and *Systematic Fuzzing and Testing of TLS Libraries*.
+
+In order to classify these methodologies, we shall be using the following approach, first we will determine the *type* of testing, which will be one of:
+- *Dynamic Testing*
+- *Static Testing*
+
+If an approach uses dynamic testing, it can be further classified into:
+- *Penetration testing*
+- *Fuzzing*
+
+If fuzzing is being used, it can be specified either as:
+- *Random fuzzing*
+- *Mutation-based fuzzing*
+- *Generation-based fuzzing*
+- *Concolic testing*
+
+If the approach uses static testing, it can be classified into:
+- *Model-checking*
+- *Code-based analysis*
+
+If model-checking is being used, it can be specified as:
+- *Explicit-state model-checking*
+- *Symbolic model-checking*
+- *Bounded model-checking*
+
+Next, the *exceptional element* and *test oracle* shall be categorized. The exceptional element can be portrayed either as:
+- An *execution trace*
+- A *execeptional input*
+
+The *test oracle* can be:
+- A *reference implementation*
+- A *specification*
+
+Also in consideration are the *test scope* and the *exit criteria*. The test scope can be either
+- *Component testing*
+- *Integration testing*
+- *System testing*
+- *Regression testing*
+
+The *exit criteria* can be:
+- *Manual*
+- *Coverage*
+
+For dynamic testing methods, the *injection vector* and *instrumentation* are considered. The injection vector and can be one of:
+- *Server interaction*
+- *Simulated interaction*
+
+The *instrumentation* can be
+- *Out-of-band*
+- *In-band*
+
+Additionally, we consider the *accessibility* of test artifacts as either:
+- *White-box testing*
+- *Black-box testing*
+
+We classify whether the methodology is vulnerable to *spurrious warnings* or *missed bugs* and consider the form of vulnerabilities received:
+- *Exceptional traces*
+- *Manually-inspected behavior*
+- *Source code correspondences*
+- *Counterexamples* (for model checking)
+
+Finally, we consider how the discovered vulnerabilities are corresponded to faults:
+- *Manually*
+- *Automatically*
 
 
 ### IV. Result Classification
