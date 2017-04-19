@@ -77,10 +77,57 @@ Similarly to TCP or IP, data that is exchanged within a TLS session is framed us
 The process for delivering application data using the record protocol is that the data is divided into blocks of a maximum size of 16 KB. A MAC or HMAC is then added to each block and the data is encrypted using the ciphersuite that was negociated during the handshake. Depending on the ciphersuite being used, padding might be added to the data. The reverse of this process is used by the client when it receives a frame of data.
 
 
-#### Background on Software Testing
+#### Software Security Testing Background and Definitions
 
-- Software Testing background/definitions
+In a classical sense, *Software testing* consists of the dynamic verification that a program provides expected behaviors on a finite set of *test cases* called a *test suite*. Closely related is the notion of *dynamic testing* that evaluates software by observing its execution. On the other hand, *Static testing* checks *software development artifacts* (i.e requirements, design,or code) without the execution of these artifacts. Static testing is usually performed either through *manual reviews* or *automated analysis*.
 
+After a particular test case is executed, the observed and intended behaviors of the *software under test* (SUT) are compared, resulting in a *verdict* that is either:
+- *Pass*: the behaviors conform
+- *Fail*: the behaviors do not conform
+- *Inconclusive*: it cannot be determined whether the behaviors conform.
+
+The mechanism that is used for determing the verdict is called the *test oracle*. If the SUT is being checked for compliance with user or customer needs this is called *validation*. If the SUT is being tested against a specification this is called *verificaiton*.
+
+In the event of a *failure*, which is an undesired behavior that either fails validation or verification, a cause of failure called a *fault* may be assigned to it.
+
+A fault can be either:
+- A *static defect* in the software caused by human error in the specification, design or coding process.
+- A *behavioral description* of how the software deviates from the intended behavior.
+- A *vulnerability*, which is fault that is a *security flaw* and results in a violation of a security property.
+
+The meaning of vulnerability is one of two things, either the security mechanism necessary for protecting against that vulnerability is missing, or the security mechanism has been implemented in a faulty way.
+
+*Security testing* verifies and validates software system requirements related to security properties. Typical secuirty properties under test are:
+- *Confidentiality*, which is the assurance that information is not disclosed to unauthorized individuals, processes, or devices
+*Integrity*, which is provided when data is unchanged from its source and has not been accidentally or maliciously modified, altered, or destroyed. 
+- *Availability*, which guarantees timely, reliable access to data and information services for authorized users.
+- *Authentication*, which is a security measure designed to establish the validity of a transmission, message, or originator, or a means of verifying an individual’s authorization to receive specific categories of information. 
+- *Authorization*, which provides access privileges granted to a user, program, or process.
+- *Non-repudiation*, which is the assurance that none of the partners taking part in a transaction can later deny of having participated.
+
+There are several paradigms for performing security testing depending on what stage during the application's development the testing occurs. However, it should be noted that testing methods from earlier stages can be used for later stages but methods from later stages cannot be used duirng earlier stages of the application development lifecycle.
+- *Model-based* security testing is grounded on requirements and design models created during the analysis and design phase. *Model-based testing* (MBT), manually selected algorithms automatically and systematically generate test cases from a set of models of the system under test or its environment
+- *Code-based* testing and static analysis on source and bytecode created during development
+- *Penetration testing and dynamic analysis* on running systems, either in a test or production environment
+- *Security regression testing* performed during maintenance.
+
+The *test scope* describes the granularity with which the SUT is being evaluated. Usually, this can be divided into *component*, *integration*, *system*, or *regression* testing:
+- Component testing, also referred to as *unit testing*, checks the smallest testable software component in isolation.
+- Integration testing tests a set of combined components.
+- System testing tests the system as a whole, including and subsets of components.
+- Regression testing is a form of selective testing that checks that certain software modifications have not resulted in faults.
+
+A *test plan* is a set of *test objectives*, *test scope*, and *test methods* that identifies features to be tested and *exit criteria* that define conditions when testing will end. A typical form of *exit criteria* is *coverage*, which measures how much of a particular program is reached during testing.
+
+The *accessibility* of software development artifacts under test is a measure of how much information is available *a prior* about the SUT.
+- *White-box testing* uses test cases that are derived based on information about how the software has been designed or coded.
+- *Black-box etsting* uses test cases that rely only on the input/output behavior of the software is available. It is frequently used in security testing where testing is often done to mimic external attacks from an adversary.
+
+As noted, black-box testing does not require access to source code or other development artifacts of the SUT. Testing is typicall yperformed via interaction with the SUT using:
+- *Fuzzing*, which feeds random data to a program "until it crashes"
+- *Mutation-based fuzzing*, where the fuzzer has knowledge about the input format of the program under test, such as existing data samples.
+- *Generation-based fuzzing*, which uses a model of the input data for generating test data.
+- *Concolic testing*, which combines symbolic execution that is a static source code analysis technique with dynamic testing.
 
 #### Background on Protocol Verification
 
