@@ -121,7 +121,7 @@ The *instrumentation* used to monitor the SUT can be divided into two categories
 
 *Security testing* verifies and validates software system requirements related to security properties. Typical security properties under test are:
 - *Confidentiality*, which is the assurance that information is not disclosed to unauthorized individuals, processes, or devices
-*Integrity*, which is provided when data is unchanged from its source and has not been accidentally or maliciously modified, altered, or destroyed. 
+- *Integrity*, which is provided when data is unchanged from its source and has not been accidentally or maliciously modified, altered, or destroyed. 
 - *Availability*, which guarantees timely, reliable access to data and information services for authorized users.
 - *Authentication*, which is a security measure designed to establish the validity of a transmission, message, or originator, or a means of verifying an individual’s authorization to receive specific categories of information. 
 - *Authorization*, which provides access privileges granted to a user, program, or process.
@@ -188,7 +188,7 @@ There is a level of care to be given to the models themselves. We say that a mod
 Finally, we say that *trace properties* are properties that can be defined on each execution trace of the protocol, and *equivalence properties* mean that an adversary cannot distinguish two processes.
 
 
-### III. Methodology Classification 
+### III. Methodology and Result Classification 
 
 We shall be looking at the following approaches:
 - "Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations" [Brubaker]  (*Frankencerts*)
@@ -200,7 +200,7 @@ We shall be looking at the following approaches:
 - "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing" [Walz]  (*Testing Embedded TLS Implementations*)
 - "Goanna—A Static Model Checker" [Fehnker]  (*Goanna—A Static Model Checker*)
 
-#### Framework for Methodology Classification
+#### Framework for Methodology and Result Classification
 
 In order to classify methodologies, we shall be using the following approach, first we will determine the *type* of testing, which will be one of:
 - *Dynamic Testing*
@@ -225,7 +225,11 @@ If model-checking is being used, it can be specified as:
 - *Symbolic model-checking*
 - *Bounded model-checking*
 
-Next, the *exceptional element*, *test oracle*, and *specification* shall be categorized. The exceptional element can be portrayed either as:
+The model used in model-checking is either:
+- *Manually specified*
+- *Automatically generated*
+
+Next, the *exceptional element* and the *test oracle* shall be categorized. The exceptional element can be portrayed either as:
 - An *execution trace*
 - An *exceptional input*
 
@@ -234,7 +238,7 @@ The *test oracle* can be:
 - A *specification*
 - *Manual inspection*
 
-The *specification* is either:
+The *reference implementation* and the *specification* are either:
 - *Manually determined*
 - *Automatically generated*
 
@@ -267,24 +271,36 @@ We classify whether the methodology is vulnerable to *spurious warnings* or *mis
 - *Source code correspondences*
 - *Counterexamples* (for model checking)
 
-Finally, we consider how the discovered vulnerabilities are corresponded to faults:
+Finally, we consider how the discovered vulnerabilities are corresponded to violations of security properties:
 - *Manually*
 - *Automatically*
 
 To summarize, each methodology shall be classified using these metrics:
 
+(8) Core Properties
 1. Type
-2. Accessibility
-3. Exceptional Element
-4. Injection Vector
-5. Instrumentation
-6. Test Oracle
-7. Specification
-8. Test Scope
-9. Exit Criteria
-10. Vulnerability to False Positives
-11. Form of Vulnerabilities
-12. Threat Assessment of Vulnerabilities
+2. Test Scope
+3. Pre-test Accessibility
+4. In-test Accessibility
+5. Post-test Accessibility
+6. Exceptional Element
+7. Test Oracle
+8. Exit Criteria
+
+(3) Dynamic Testing
+1. Type
+2. Injection Vector
+3. Instrumentation
+
+(2) Static Testing
+1. Type
+2. Model Generation
+
+(4) Results 
+1. Spurious Warnings?
+2. Missed Bugs?
+2. Form of Vulnerabilities
+3. Threat Assessment of Vulnerabilities
 
 #### Classifications
 
@@ -321,7 +337,7 @@ The test oracle is a *reference implementation*, but is a bit more nuanced than 
 
 ##### 8. Specification
 
-Since there is no single reference implementation, the specification must be *manually determined*. That means, for each discrepancy uncoveredm the authors must manually determine which of the conflicting behaviors is correct and what specifically is the fault.
+Since there is no single reference implementation, the specification must be *manually determined*. That means, for each discrepancy uncovered the authors must manually determine which of the conflicting behaviors is correct and what specifically is the fault.
 
 ##### 9. Exit Criteria
 
@@ -395,7 +411,7 @@ The threat assessment was performed *manually*.
 
 *C. Finite-State Analysis of SSL 3.0*
 
-The authors of this paper attampted to analyze the SSL protocol using a finite-state enumeration tool called Mur$\phi$. They completed the analysis by using a sequence of incremental approximations to the SSL 3.0 handshake that is then model-checked using Mur$\phi$. Though this methodology they discovered some anomalies in the session resumption protocol.
+The authors of this paper attempted to analyze the SSL protocol using a finite-state enumeration tool called Mur$\phi$. They completed the analysis by using a sequence of incremental approximations to the SSL 3.0 handshake that is then model-checked using Mur$\phi$. Though this methodology they discovered some anomalies in the session resumption protocol.
 
 ##### 1. Type
 
@@ -565,7 +581,7 @@ The accessibility of any code artifacts is *black-box*, the authors do not have 
 
 ##### 3. Exceptional Element
 
-The exceptional element is not appliciable as the model checking is done manually.
+The exceptional element is not applicable as the model checking is done manually.
 
 ##### 4. Injection Vector
 
