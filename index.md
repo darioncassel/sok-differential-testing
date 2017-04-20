@@ -195,7 +195,6 @@ We shall be looking at the following approaches:
 - "Finite-State Analysis of SSL 3.0" [Mitchell]  (*Finite-State Analysis of SSL 3.0*)
 - "Not-quite-so broken TLS: lessons in re-engineering a security protocol specification and implementation" [Kaloper-Mersinjack]  (*Not-quite-so-broken TLS*)
 - "A Messy State of the Union: Taming the Composite State Machines of TLS" [Beurdouche]  (*A Messy State of the Union*)
-- "Imperfect Forward Secrecy: How Diffie-Hellman Fails in Practice" [Adrian]  (*Imperfect Forward Secrecy*)
 - "Systematic Fuzzing and Testing of TLS Libraries" [Somorovsky]  (*Systematic Fuzzing and Testing of TLS Libraries*)
 - "Protocol state fuzzing of TLS implementations" [Ruiter]  (*Protocol state fuzzing of TLS implementations*)
 - "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing" [Walz]  (*Testing Embedded TLS Implementations*)
@@ -262,7 +261,7 @@ Additionally, we consider the *accessibility* of test artifacts as either:
 - *White-box testing*
 - *Black-box testing*
 
-We classify whether the methodology is vulnerable to *spurrious warnings* or *missed bugs* and consider the form of vulnerabilities received:
+We classify whether the methodology is vulnerable to *spurious warnings* or *missed bugs* and consider the form of vulnerabilities received:
 - *Exceptional traces*
 - *Manually-inspected behavior*
 - *Source code correspondences*
@@ -328,9 +327,9 @@ Since there is no single reference implementation, the specification must be *ma
 
 The exit criteria is a form of *exhaustion*. Once all of the test case data is exhausted, the testing ends.
 
-##### 10. Vulnerability to Spurrious Warnings
+##### 10. Vulnerability to *spurious Warnings
 
-This method is *not vulnerable* to spurrious warnings. Since differential testing is being employed, any discrepancy must be an actual fault in one of the implementations since they all proport to implement the same specification.
+This method is *not vulnerable* to *spurious warnings. Since differential testing is being employed, any discrepancy must be an actual fault in one of the implementations since they all proport to implement the same specification.
 
 ##### 11. Form of Vulnerabilities
 
@@ -499,16 +498,114 @@ The form of vulnerabilities is *exceptional traces*, errors from the SUT.
 The threat assessment is done *manually*, though the manual code-based analysis.
 
 
-*E. Imperfect Forward Secrecy*
+*E. Systematic Fuzzing and Testing of TLS Libraries*
 
-*F. Systematic Fuzzing and Testing of TLS Libraries*
+This paper presents TLS-Attacker, an open source framework for evaluating the security of TLS libraries throught the creation of custom TLS message flows and the arbitrary modification of message contents. This framework is used to mount a two-stage fuzzing approach to evaluate TLS server behavior. 
 
-*G. Protocol state fuzzing of TLS implementations*
+##### 1. Type
 
-*H. Testing Embedded TLS Implementations*
+The type of testing done is *dynamic testing*. The two stage approach is to first perform restricted *random fuzzzing* specifically targeted at triggering Bleichenbacher's attack, padding oracle attacks, invalid curve attacks, and POODLE. In the second stage, three phases of attacks are performed, but they all use *mutation-based fuzzing* to send protocol flows with randomly modified variables.
 
-*I. Goanna—A Static Model Checker*
+##### 2. Accessibility
 
+The accessibility is *black-box*, the source code of implementations is not inspected during testing.
+
+##### 3. Exceptional Element
+
+The exceptional element of both stages is an *exceptional input* of the form of a protocol flow.
+
+##### 4. Injection Vector
+
+The injection vector is a *simulated server*; the framework being used.
+
+##### 5. Instrumentation
+
+*Out-of-band* instrumentation is used. In order to detect buffer boundary violations or other memory corruptions, the authors utilize AddressSanitizer which monitors the program at runtime for memory errors. The authors also detect if an invalid protocol flow by using a TLS context analyzer. 
+
+##### 6. Test Oracle
+
+The test oracle in this case is *manual inspection* of the testing data.
+
+##### 7. Specification
+
+The specification is *manually determined* based on the authors' knowledge of the TLS protocol.
+
+##### 8. Test Scope
+
+The test scope is *system testing* since the SUT is an entire particular TLS implementation.
+
+##### 9. Exit Criteria
+
+The exit criteria is *manual*. A user of the testing framework configures the number of fuzzing attempts.
+
+##### 10. Vulnerability to False Positives
+
+This method is *vulnerable* to false positives.
+
+##### 11. Form of Vulnerabilities
+
+The form of vulnerabilities is *exceptional traces* both in terms of the output of AddressSanitizer and the TLS context analyzer.
+
+##### 12. Threat Assessment of Vulnerabilities
+
+The threat assessment had to be completed *manually*. Each potential vulnerability was analyzed by the authors.
+
+
+*F. Protocol state fuzzing of TLS implementations*
+
+The authors perform a systematic analysis of TLS implementations by using state machine learning to infer state machines from protocol implemetations, and then check those state machines manually to look for spurious behavior. If spurious behavior is found, the authors then manually investigate the implementations to look for vulnerabilities.
+
+##### 1. Type
+
+The type of testing is *static testing*, specifically it is *model-checking*, but the checking of the model is done manually.
+
+##### 2. Accessibility
+
+The accessibility of any code artifacts is *black-box*, the authors do not have access to the source code during testing, but then utilize it during the threat evaluation.
+
+##### 3. Exceptional Element
+
+The exceptional element is not appliciable as the model checking is done manually.
+
+##### 4. Injection Vector
+
+There is no injection vector as the model checking is done manually.
+
+##### 5. Instrumentation
+
+There is no instrumentation as the model checking is done manually.
+
+##### 6. Test Oracle
+
+The test oracle in this case is *manual inspection* of the generated models.
+
+##### 7. Specification
+
+The specification is *manually determined*.
+
+##### 8. Test Scope
+
+The scope of the testing is *component testing*. Testing is done over models generated using message flows in the TLS handshake and with the heartbeat protocol.
+
+##### 9. Exit Criteria
+
+The exit criteria for the testing is *manual*.
+
+##### 10. Vulnerability to False Positives
+
+This methodology is *vulnerable* to false positives since any misbehavior must be inspected learning to some benign cases. 
+
+##### 11. Form of Vulnerabilities
+
+The form of vulnerabilities is the *manually-inspected behavior* of the generated model.
+
+##### 12. Threat Assessment of Vulnerabilities
+
+Threat assessment is done *manually*, if a spurious behavior is noticed in a generated model of a particular implementation, the authors then manually inspect the source code of that implementation.
+
+*G. Testing Embedded TLS Implementations*
+
+*H. Goanna—A Static Model Checker*
 
 
 ### IV. Result Classification
@@ -523,7 +620,7 @@ The threat assessment is done *manually*, though the manual code-based analysis.
 ### VII. [!] Results with the Combined Approach
 
 
-### VIII. Related Works
+### VIII. [!] Related Works
 
 
 ### IX. [!] Future Research
