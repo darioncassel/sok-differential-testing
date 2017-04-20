@@ -172,7 +172,9 @@ Finally, we say that *trace properties* are properties that can be defined on ea
 
 We shall be looking at the following approaches *Finite-State Analysis of SSL 3.0*, *Not-quite-so broken TLS*, *Frankencerts*, *FLEXTLS*, and *Systematic Fuzzing and Testing of TLS Libraries*.
 
-In order to classify these methodologies, we shall be using the following approach, first we will determine the *type* of testing, which will be one of:
+#### Framework for Methodology Classification
+
+In order to classify methodologies, we shall be using the following approach, first we will determine the *type* of testing, which will be one of:
 - *Dynamic Testing*
 - *Static Testing*
 
@@ -195,13 +197,17 @@ If model-checking is being used, it can be specified as:
 - *Symbolic model-checking*
 - *Bounded model-checking*
 
-Next, the *exceptional element* and *test oracle* shall be categorized. The exceptional element can be portrayed either as:
+Next, the *exceptional element*, *test oracle*, and *specification* shall be categorized. The exceptional element can be portrayed either as:
 - An *execution trace*
-- A *execeptional input*
+- An *execeptional input*
 
 The *test oracle* can be:
 - A *reference implementation*
 - A *specification*
+
+The *specification* is either:
+- *Manually determined*
+- *Automatically generated*
 
 Also in consideration are the *test scope* and the *exit criteria*. The test scope can be either
 - *Component testing*
@@ -234,6 +240,76 @@ We classify whether the methodology is vulnerable to *spurrious warnings* or *mi
 Finally, we consider how the discovered vulnerabilities are corresponded to faults:
 - *Manually*
 - *Automatically*
+
+To summarize, each methodology shall be classified using these metrics:
+``` 
+1. Type
+2. Accessibility
+3. Exceptional Element
+4. Injection Vector
+5. Instrumentation
+6. Test Oracle
+7. Specification
+8. Test Scope
+9. Exit Criteria
+10. Vulnerability to False Positives
+11. Form of Vulnerabilities
+12. Threat Assessment of Vulnerabilities
+```
+
+#### Classifications
+
+*A. Frankencerts*
+
+The Frankencerts paper implemented a methodology for large-scale testing of certificate validation logic in SSL/TLS implementations through the use of randomly generated synthetic certificates built from parts of real certificates. The authors then applied differential testing to uncover disrepancies between several SSL/TLS implementations such as OpenSSL, NSS, CyaSSL, GnuTLS, PolarSSL, and MatrixSSL. 208 discrepancies were identified, which could be attributed to 15 distinct root causes.
+
+##### Type
+The Frankencerts paper uses a **dynamic testing approach**. Specifically, it uses **mutation-based fuzzing** wherein a sample of input data is permutated to form new test cases.
+
+##### Accessibility
+
+This methodology uses **black-box testing**; the tests have no knowledge of the source code; the SUT is viewed purely as an input/output machine.
+
+##### Test Scope
+
+The scope is **system testing**. Although the authors are attempting to test just certificate validation, they must run the full implementations as the SUT and could theoretically receive faults from other parts of the system than the certificate validation subsystem.
+
+##### Exceptional Element
+
+The exceptional element is an **exceptional input**, in this case a "frankencert" which is a X.509 certificate automatically generated from a set of sample input data (other certificates).
+
+##### Injection Vector
+
+The injection vector is **server-interaction**. The authors set up a server that would present connecting clients (running one of the SSL/TLS libraries) with a frankencert.
+
+##### Instrumentation
+
+The instrumentation is **in-band**. The clients set up by the authors record the answers, including error codes, given by the SSL/TLS implementations when presented with the frankencert.
+
+##### Test Oracle
+
+The test oracle is a **reference implementation**, but is a bit more nuanced than that; in the case of this approach the test oracle is discrepancies between the behavior of the implementations, given that each implementation is presented with the same frankencert.
+
+##### Specification
+
+Since there is no single reference implementation, the specification must be **manually determined**. That means, for each discrepancy uncoveredm the authors must manually determine which of the conflicting behaviors is correct and what specifically is the fault.
+
+##### Exit Criteria
+
+The exit criteria is a form of **coverage**. Once all of the test case data is exhausted, the testing ends.
+
+##### Vulnerability to Spurrious Warnings
+
+This method is **not vulnerable** to spurrious warnings. Since differential testing is being employed, any discrepancy must be an actual fault in one of the implementations since they all proport to implement the same specification.
+
+##### Form of Vulnerabilities
+
+The form of vulnerabilities is **exceptional traces**, as mentioned, answers and error codes from the implementations are recorded.
+
+##### Threat Assessment of Vulnerabilities
+
+The threat assessment of vulnerabilities must be done **manually**. If a given implementation has a discrepancy, it must be carefully tested (manually) to determine what caused that discrepancy.
+
 
 
 ### IV. Result Classification
