@@ -1,3 +1,23 @@
+<style TYPE="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
 ## SoK: SSL/TLS Security Protocol Testing and Verification
 
 Darion Cassel<sup>1</sup>, David Evans<sup>1</sup>
@@ -199,7 +219,7 @@ If model-checking is being used, it can be specified as:
 
 Next, the *exceptional element*, *test oracle*, and *specification* shall be categorized. The exceptional element can be portrayed either as:
 - An *execution trace*
-- An *execeptional input*
+- An *exceptional input*
 
 The *test oracle* can be:
 - A *reference implementation*
@@ -218,6 +238,7 @@ Also in consideration are the *test scope* and the *exit criteria*. The test sco
 
 The *exit criteria* can be:
 - *Manual*
+- *Exhaustion*
 - *Coverage*
 
 For dynamic testing methods, the *injection vector* and *instrumentation* are considered. The injection vector and can be one of:
@@ -243,7 +264,7 @@ Finally, we consider how the discovered vulnerabilities are corresponded to faul
 - *Automatically*
 
 To summarize, each methodology shall be classified using these metrics:
-``` 
+
 1. Type
 2. Accessibility
 3. Exceptional Element
@@ -256,7 +277,6 @@ To summarize, each methodology shall be classified using these metrics:
 10. Vulnerability to False Positives
 11. Form of Vulnerabilities
 12. Threat Assessment of Vulnerabilities
-```
 
 #### Classifications
 
@@ -297,7 +317,7 @@ Since there is no single reference implementation, the specification must be *ma
 
 ##### 9. Exit Criteria
 
-The exit criteria is a form of *coverage*. Once all of the test case data is exhausted, the testing ends.
+The exit criteria is a form of *exhaustion*. Once all of the test case data is exhausted, the testing ends.
 
 ##### 10. Vulnerability to Spurrious Warnings
 
@@ -350,7 +370,7 @@ The test scope was *system testing*, in this case, the entirety of nqsb-TLS.
 
 ##### 9. Exit Criteria
 
-The exit criteria for the mutation-based fuzzing was *coverage*, exhaustion of the test set. The exit criteria for the penetration testing was *manual*, after a period of time the testing ended.
+The exit criteria for the mutation-based fuzzing was *exhaustion* of the test set. The exit criteria for the penetration testing was *manual*, after a period of time the testing ended.
 
 ##### 10. Vulnerability to False Positives
 
@@ -358,13 +378,127 @@ Both forms of testing were *not vulnerable* to false positives.
 
 ##### 11. Form of Vulnerabilities
 
-No vulnerabilities were discovered with nqsb-TLS. Of the vulnerabilities discovered in OpenSSL, they of the form of *counterexamples* as compared to what nqsb-TLS did.
+No vulnerabilities were discovered with nqsb-TLS. Of the faults discovered in OpenSSL, they of the form of *counterexamples*; comparison to what nqsb-TLS did given a particular input.
 
 ##### 12. Threat Assessment of Vulnerabilities
 
 The threat assessment was performed *manually*.
 
 
+*C. Finite-State Analysis of SSL 3.0*
+
+The authors of this paper attampted to analyze the SSL protocol using a finite-state enumeration tool called Mur$\phi$. They completed the analysis by using a sequence of incremental approximations to the SSL 3.0 handshake that is then model-checked using Mur$\phi$. Though this methodology they discovered some anomalies in the session resumption protocol.
+
+##### 1. Type
+
+This paper uses a finite-state analysis tol and thus is a form of *static testing*; specifically, *model-checking*.
+
+##### 2. Accessibility
+
+The accessibility of artifacts was *white-box*; the authors had access to the protocol code and were specifically developing a "rational reconstruction" of the protocol.
+
+##### 3. Exceptional Element
+
+The finite state analysis tool Mur$\phi$ presents an *execution trace*, which in ths case is a sequence of states from the start state to a state exhibiting the problem; a counterexample to a guarantee that some invariant is held by the program.
+
+##### 4. Injection Vector
+
+Since this is static testing, no injection vector is present.
+
+##### 5. Instrumentation
+
+Since this is static testing, no instrumentation is present.
+
+##### 6. Test Oracle
+
+The test oracle in this case is a *specification* of invariants. 
+
+##### 7. Specification
+
+The form of the specification is a set of Boolean conditions that have to be true in every reachable state; essentially they bound what a "safe" state is. This had to be *manually determined* from the authors' knowledge of the SSL protocol.
+
+##### 8. Test Scope
+
+The test scope was *component testing*; only the SSL 3.0 handshake was under consideration. 
+
+##### 9. Exit Criteria
+
+The exit criteria was *coverage*, the Mur$\phi$ tool exhaustively tests all possible interleavings of protocol and intruder actions to ensure that a set of correctness conditions is satisfied in all cases.
+
+##### 10. Vulnerability to False Positives
+
+Although Mur$\phi$ was not vulnerable to false positives since it is a model-checker, it did unccover problems that were not necessarily direct threats to the security of SSL 3.0. 
+
+##### 11. Form of Vulnerabilities
+
+The form of the anomalies was *counterexamples* as is typical of model-checking.
+
+##### 12. Threat Assessment of Vulnerabilities
+
+The threat assessment of the anomalies was done *automatically* though the generation of a potential attack. 
+
+*D. A Messy State of the Union*
+
+The authors address the problem of designing a composite state machine that can multiplex between different protocol modes and then test several TLS implementations for state machine bugs.
+
+##### 1. Type
+
+The authors analyze the state machines of multiple open source TLS implementations using a combination of *dynamic testing*, specifically *generation-based fuzzing*, and manual source code analysis for the classification of errors, which is *static testing*, specifically *code-based analysis*.
+
+##### 2. Accessibility
+
+During the dynamic testing, the authors use FlexTLS to send arbitrary sequences of TLS messages to the implementations, and thus the dynamic testing is *black-box testing*. Since source code analysis is done duirng the static testing, it is *white-box testing*.
+
+##### 3. Exceptional Element
+
+The exceptional element in the case of the generation-based fuzzing is an *exceptional input* in the form of a sequence of valid TLS messages. For the code-based analysis there is no exceptional element.
+
+##### 4. Injection Vector
+
+For the dynamic testing, the injection vector is *simulated interaction*; FlexTLS simulates a clients connection to a server. There is no injection vector for the code-based analysis.
+
+##### 5. Instrumentation
+
+The instrumentation for the dynamic testing is *in-band*, the authors expect to get an error message from the implementation. There is no instrumentation for the static testing.
+
+##### 6. Test Oracle
+
+The test oracle for the dynamic testing is a *reference implementation*; the authors have a verified TLS state machine that is used to verify that a particular trace is valid or invalid (and thus that the implemetation should accept or reject it). The test oracle for the static testing is *manual inspection*.
+
+##### 7. Specification
+
+The specification for a particular trace is *automatically generated* in the sense that FlexTLS generates it and then the verified state machine accepts it. The specification for the code-based analysis is manually determined.
+
+##### 8. Test Scope
+
+The test scope for the dynamic testing is *system testing* since the implementations are viewed as black boxes. The test scope for the manual code analysis is also *system testing* since the manual analysis is done on the basis of the dynamic testing.
+
+##### 9. Exit Criteria
+
+The exit criteria for the dynamic testing is *exhaustion* of the test cases. The exit critera for the manual code analysis is *manual*.
+
+##### 10. Vulnerability to False Positives
+
+For the dynamic testing, the authors attempt to reduce false positives by using verified messaging libraries, but they cannot guarantee that no false positives will be generated with this methodology. Thus, the dynamic testing is *vulnerable* to false positives. The code-based analysis is *not vulnerable* to false positives.
+
+##### 11. Form of Vulnerabilities
+
+The form of vulnerabilities is *exceptional traces*, errors from the SUT.
+
+##### 12. Threat Assessment of Vulnerabilities
+
+The threat assessment is done *manually*, though the manual code-based analysis.
+
+
+*E. Imperfect Forward Secrecy*
+
+*F. Systematic Fuzzing and Testing of TLS Libraries*
+
+*G. Protocol state fuzzing of TLS implementations*
+
+*H. Testing Embedded TLS Implementations*
+
+*I. Goanna—A Static Model Checker*
 
 
 
