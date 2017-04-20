@@ -265,51 +265,51 @@ To summarize, each methodology shall be classified using these metrics:
 The Frankencerts paper implemented a methodology for large-scale testing of certificate validation logic in SSL/TLS implementations through the use of randomly generated synthetic certificates built from parts of real certificates. The authors then applied differential testing to uncover disrepancies between several SSL/TLS implementations such as OpenSSL, NSS, CyaSSL, GnuTLS, PolarSSL, and MatrixSSL. 208 discrepancies were identified, which could be attributed to 15 distinct root causes.
 
 ##### 1. Type
-The Frankencerts paper uses a **dynamic testing approach**. Specifically, it uses **mutation-based fuzzing** wherein a sample of input data is permutated to form new test cases.
+The Frankencerts paper uses a *dynamic testing approach*. Specifically, it uses *mutation-based fuzzing* wherein a sample of input data is permutated to form new test cases.
 
 ##### 2. Accessibility
 
-This methodology uses **black-box testing**; the tests have no knowledge of the source code; the SUT is viewed purely as an input/output machine.
+This methodology uses *black-box testing*; the tests have no knowledge of the source code; the SUT is viewed purely as an input/output machine.
 
 ##### 3. Test Scope
 
-The scope is **system testing**. Although the authors are attempting to test just certificate validation, they must run the full implementations as the SUT and could theoretically receive faults from other parts of the system than the certificate validation subsystem.
+The scope is *system testing*. Although the authors are attempting to test just certificate validation, they must run the full implementations as the SUT and could theoretically receive faults from other parts of the system than the certificate validation subsystem.
 
 ##### 4. Exceptional Element
 
-The exceptional element is presented as an **exceptional input**, in this case a "frankencert" which is a X.509 certificate automatically generated from a set of sample input data (other certificates).
+The exceptional element is presented as an *exceptional input*, in this case a "frankencert" which is a X.509 certificate automatically generated from a set of sample input data (other certificates).
 
 ##### 5. Injection Vector
 
-The injection vector is **server-interaction**. The authors set up a server that would present connecting clients (running one of the SSL/TLS libraries) with a frankencert.
+The injection vector is *server-interaction*. The authors set up a server that would present connecting clients (running one of the SSL/TLS libraries) with a frankencert.
 
 ##### 6. Instrumentation
 
-The instrumentation is **in-band**. The clients set up by the authors record the answers, including error codes, given by the SSL/TLS implementations when presented with the frankencert.
+The instrumentation is *in-band*. The clients set up by the authors record the answers, including error codes, given by the SSL/TLS implementations when presented with the frankencert.
 
 ##### 7. Test Oracle
 
-The test oracle is a **reference implementation**, but is a bit more nuanced than that; in the case of this approach the test oracle is discrepancies between the behavior of the implementations, given that each implementation is presented with the same frankencert.
+The test oracle is a *reference implementation*, but is a bit more nuanced than that; in the case of this approach the test oracle is discrepancies between the behavior of the implementations, given that each implementation is presented with the same frankencert.
 
 ##### 8. Specification
 
-Since there is no single reference implementation, the specification must be **manually determined**. That means, for each discrepancy uncoveredm the authors must manually determine which of the conflicting behaviors is correct and what specifically is the fault.
+Since there is no single reference implementation, the specification must be *manually determined*. That means, for each discrepancy uncoveredm the authors must manually determine which of the conflicting behaviors is correct and what specifically is the fault.
 
 ##### 9. Exit Criteria
 
-The exit criteria is a form of **coverage**. Once all of the test case data is exhausted, the testing ends.
+The exit criteria is a form of *coverage*. Once all of the test case data is exhausted, the testing ends.
 
 ##### 10. Vulnerability to Spurrious Warnings
 
-This method is **not vulnerable** to spurrious warnings. Since differential testing is being employed, any discrepancy must be an actual fault in one of the implementations since they all proport to implement the same specification.
+This method is *not vulnerable* to spurrious warnings. Since differential testing is being employed, any discrepancy must be an actual fault in one of the implementations since they all proport to implement the same specification.
 
 ##### 11. Form of Vulnerabilities
 
-The form of vulnerabilities is **exceptional traces**, as mentioned, answers and error codes from the implementations are recorded.
+The form of vulnerabilities is *exceptional traces*, as mentioned, answers and error codes from the implementations are recorded.
 
 ##### 12. Threat Assessment of Vulnerabilities
 
-The threat assessment of vulnerabilities must be done **manually**. If a given implementation has a discrepancy, it must be carefully tested (manually) to determine what caused that discrepancy.
+The threat assessment of vulnerabilities must be done *manually*. If a given implementation has a discrepancy, it must be carefully tested (manually) to determine what caused that discrepancy.
 
 
 *B. Not-quite-so broken TLS*
@@ -318,51 +318,51 @@ With the Not-quite-so-broken TLS, the authors of the paper sought to build a ref
 
 ##### 1. Type
 
-The type of testing was **dynamic testing**, specifically **mutation-based fuzzing** and **penetration testing**. In the first case, the Frankencert method was used to generate 10,000 X.509 certificate chains and these were given to nqsb-TLS. In the second case, the authors set up a publically accessible server running nqsb-TLS and set a bounty for the successful compromise of the server.
+The type of testing was *dynamic testing*, specifically *mutation-based fuzzing* and *penetration testing*. In the first case, the Frankencert method was used to generate 10,000 X.509 certificate chains and these were given to nqsb-TLS. In the second case, the authors set up a publically accessible server running nqsb-TLS and set a bounty for the successful compromise of the server.
 
 ##### 2. Accessibility
 
-Both forms of testing were **black-box testing**, neither the frankencert method nor server attackers had access to the source code during the trials.
+Both forms of testing were *black-box testing*, neither the frankencert method nor server attackers had access to the source code during the trials.
 
 ##### 3. Exceptional Element
 
-Both forms of testing used **exceptional inputs**. The mutation-based fuzzing fed mutated certificates and the penetration testing gave inputs to the server.
+Both forms of testing used *exceptional inputs*. The mutation-based fuzzing fed mutated certificates and the penetration testing gave inputs to the server.
 
 ##### 4. Injection Vector
 
-The injection vector in both cases was through **server-interaction**.
+The injection vector in both cases was through *server-interaction*.
 
 ##### 5. Instrumentation
 
-The instrumentation was an **out-of-band**, the authors could monitor whether the implementation accepted the frankencerts and could track attack traces on the public server.
+The instrumentation was an *out-of-band*, the authors could monitor whether the implementation accepted the frankencerts and could track attack traces on the public server.
 
 ##### 6. Test Oracle
 
-The test oracle in the case of the mutation-based fuzzing testing was a **reference implementation**, OpenSSL. For the penetration testing, there oracle was **manual inspection**; whether a successful attack could occur or not.
+The test oracle in the case of the mutation-based fuzzing testing was a *reference implementation*, OpenSSL. For the penetration testing, there oracle was *manual inspection*; whether a successful attack could occur or not.
 
 ##### 7. Specification
 
-In the case of the mutation-based fuzzing the specification was **manually-determined** based on knowledge of what is or is not supposed to be done as part of the TLS protocol.
+In the case of the mutation-based fuzzing the specification was *manually-determined* based on knowledge of what is or is not supposed to be done as part of the TLS protocol.
 
 ##### 8. Test Scope
 
-The test scope was **system testing**, in this case, the entirety of nqsb-TLS.
+The test scope was *system testing*, in this case, the entirety of nqsb-TLS.
 
 ##### 9. Exit Criteria
 
-The exit criteria for the mutation-based fuzzing was **coverage**, exhaustion of the test set. The exit criteria for the penetration testing was **manual**, after a period of time the testing ended.
+The exit criteria for the mutation-based fuzzing was *coverage*, exhaustion of the test set. The exit criteria for the penetration testing was *manual*, after a period of time the testing ended.
 
 ##### 10. Vulnerability to False Positives
 
-Both forms of testing were **not vulnerable** to false positives.
+Both forms of testing were *not vulnerable* to false positives.
 
 ##### 11. Form of Vulnerabilities
 
-No vulnerabilities were discovered with nqsb-TLS. Of the vulnerabilities discovered in OpenSSL, they of the form of **counterexamples** as compared to what nqsb-TLS did.
+No vulnerabilities were discovered with nqsb-TLS. Of the vulnerabilities discovered in OpenSSL, they of the form of *counterexamples* as compared to what nqsb-TLS did.
 
 ##### 12. Threat Assessment of Vulnerabilities
 
-The threat assessment was performed **manually**.
+The threat assessment was performed *manually*.
 
 
 
