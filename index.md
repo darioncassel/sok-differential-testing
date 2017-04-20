@@ -190,7 +190,16 @@ Finally, we say that *trace properties* are properties that can be defined on ea
 
 ### III. Methodology Classification 
 
-We shall be looking at the following approaches *Finite-State Analysis of SSL 3.0*, *Not-quite-so broken TLS*, *Frankencerts*, *FLEXTLS*, and *Systematic Fuzzing and Testing of TLS Libraries*.
+We shall be looking at the following approaches:
+- "Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations" [Brubaker]  (*Frankencerts*)
+- "Finite-State Analysis of SSL 3.0" [Mitchell]  (*Finite-State Analysis of SSL 3.0*)
+- "Not-quite-so broken TLS: lessons in re-engineering a security protocol specification and implementation" [Kaloper-Mersinjack]  (*Not-quite-so-broken TLS*)
+- "A Messy State of the Union: Taming the Composite State Machines of TLS" [Beurdouche]  (*A Messy State of the Union*)
+- "Imperfect Forward Secrecy: How Diffie-Hellman Fails in Practice" [Adrian]  (*Imperfect Forward Secrecy*)
+- "Systematic Fuzzing and Testing of TLS Libraries" [Somorovsky]  (*Systematic Fuzzing and Testing of TLS Libraries*)
+- "Protocol state fuzzing of TLS implementations" [Ruiter]  (*Protocol state fuzzing of TLS implementations*)
+- "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing" [Walz]  (*Testing Embedded TLS Implementations*)
+- "Goanna—A Static Model Checker" [Fehnker]  (*Goanna—A Static Model Checker*)
 
 #### Framework for Methodology Classification
 
