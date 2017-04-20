@@ -32,7 +32,7 @@ TLS/SSL implementations have been shown to be have a slew of vulnerabilities tha
 
 
 ### I. Introduction
-TLS/SSL was originated by the company *Netscape* in 1994 in order to solve the problem of securing HTTP traffic [1]. Netscape never released version 1.0 of its Secure Sockets Layer protocol (SSL) due to the discovery of serious security flaws in the protocol, but went on to release version 2.0 to the public in February of 1995. However, this version too contained many security flaws, leading to a redesign of the protocol and the release of version 3.0 in 1996 [2]. The name Transport Layer Security (TLS) was given to an upgrade of SSL version 3.0 called TLS 1.0 which was defined in January 1999 and was not meant to be interoperable with SSL 3.0 [3]. 
+TLS/SSL was originated by the company *Netscape* in 1994 in order to solve the problem of securing HTTP traffic [1]. Netscape never released version 1.0 of its Secure Sockets Layer protocol (SSL) due to the discovery of serious security flaws in the protocol, but went on to release version 2.0 to the public in February of 1995. However, this version too contained many security flaws, leading to a redesign of the protocol and the release of version 3.0 in 1996 [2]. The name Transport Layer Security (TLS) was given to an upgrade of SSL version 3.0 called TLS 1.0 which was defined in January 1999 and was not meant to be inter-operable with SSL 3.0 [3]. 
 
 Over the years many vulnerabilities have been found in TLS/SSL leading to the release of new versions of the protocol. TLS 1.1 was defined in April of 2006 in order to add protection against *cipher-block chaining* (CBC) attacks [4]. TLS 1.2 was defined in August of 2008 and it added *authenticated encryption*, removing the need for streaming and block ciphers and thus removing vulnerability to CBC attacks [5]. SSL 2.0 was formally deprecated in March of 2011. In June of 2011 the BEAST attack [6] exploiting predictable *initialization vectors* IVs is released. Although the changes of TLS 1.1 and TLS 1.2 protect against BEAST, the adoption was slow of these updates leading to a large swath of vulnerable servers. In September of 2012 Duong and Rizzo release the CRIME attack which exploits TLS compression [7], leading to a rollback of that feature. In February of 2013 the Lucky Thirteen attack is released that executes *padding oracle* attacks against CBC suites [8]. In October of 2014 the publication of the POODLE attack that also leverages a padding oracle to perform a man-in-the-middle attack leads to SSL version 3.0 being considered insecure [9]. SSL version 3.0 is formally deprecated in June of 2015 [10]. Work on TLS version 1.3 has begun as of July of 2016.
 
@@ -290,10 +290,10 @@ To summarize, each methodology shall be classified using these metrics:
 
 *A. Frankencerts*
 
-The Frankencerts paper implemented a methodology for large-scale testing of certificate validation logic in SSL/TLS implementations through the use of randomly generated synthetic certificates built from parts of real certificates. The authors then applied differential testing to uncover disrepancies between several SSL/TLS implementations such as OpenSSL, NSS, CyaSSL, GnuTLS, PolarSSL, and MatrixSSL. 208 discrepancies were identified, which could be attributed to 15 distinct root causes.
+The Frankencerts paper implemented a methodology for large-scale testing of certificate validation logic in SSL/TLS implementations through the use of randomly generated synthetic certificates built from parts of real certificates. The authors then applied differential testing to uncover discrepancies between several SSL/TLS implementations such as OpenSSL, NSS, CyaSSL, GnuTLS, PolarSSL, and MatrixSSL. 208 discrepancies were identified, which could be attributed to 15 distinct root causes.
 
 ##### 1. Type
-The Frankencerts paper uses a *dynamic testing approach*. Specifically, it uses *mutation-based fuzzing* wherein a sample of input data is permutated to form new test cases.
+The Frankencerts paper uses a *dynamic testing approach*. Specifically, it uses *mutation-based fuzzing* wherein a sample of input data is permuted to form new test cases.
 
 ##### 2. Accessibility
 
@@ -329,7 +329,7 @@ The exit criteria is a form of *exhaustion*. Once all of the test case data is e
 
 ##### 10. Vulnerability to *spurious Warnings
 
-This method is *not vulnerable* to *spurious warnings. Since differential testing is being employed, any discrepancy must be an actual fault in one of the implementations since they all proport to implement the same specification.
+This method is *not vulnerable* to *spurious warnings. Since differential testing is being employed, any discrepancy must be an actual fault in one of the implementations since they all purport to implement the same specification.
 
 ##### 11. Form of Vulnerabilities
 
@@ -342,11 +342,11 @@ The threat assessment of vulnerabilities must be done *manually*. If a given imp
 
 *B. Not-quite-so broken TLS*
 
-With the Not-quite-so-broken TLS, the authors of the paper sought to build a reference TLS implemention (nqsb-TLS) built through a re-engineered approach to security protocol specification and implementation. Although the aim of the paper was not the explicit testing of a TLS implementation, the authors' reference implementation can be used as a test oracle and was used for testing.
+With the Not-quite-so-broken TLS, the authors of the paper sought to build a reference TLS implementation (nqsb-TLS) built through a re-engineered approach to security protocol specification and implementation. Although the aim of the paper was not the explicit testing of a TLS implementation, the authors' reference implementation can be used as a test oracle and was used for testing.
 
 ##### 1. Type
 
-The type of testing was *dynamic testing*, specifically *mutation-based fuzzing* and *penetration testing*. In the first case, the Frankencert method was used to generate 10,000 X.509 certificate chains and these were given to nqsb-TLS. In the second case, the authors set up a publically accessible server running nqsb-TLS and set a bounty for the successful compromise of the server.
+The type of testing was *dynamic testing*, specifically *mutation-based fuzzing* and *penetration testing*. In the first case, the Frankencert method was used to generate 10,000 X.509 certificate chains and these were given to nqsb-TLS. In the second case, the authors set up a publicly accessible server running nqsb-TLS and set a bounty for the successful compromise of the server.
 
 ##### 2. Accessibility
 
@@ -435,7 +435,7 @@ The exit criteria was *coverage*, the Mur$\phi$ tool exhaustively tests all poss
 
 ##### 10. Vulnerability to False Positives
 
-Although Mur$\phi$ was not vulnerable to false positives since it is a model-checker, it did unccover problems that were not necessarily direct threats to the security of SSL 3.0. 
+Although Mur$\phi$ was not vulnerable to false positives since it is a model-checker, it did uncover problems that were not necessarily direct threats to the security of SSL 3.0. 
 
 ##### 11. Form of Vulnerabilities
 
@@ -483,7 +483,7 @@ The test scope for the dynamic testing is *system testing* since the implementat
 
 ##### 9. Exit Criteria
 
-The exit criteria for the dynamic testing is *exhaustion* of the test cases. The exit critera for the manual code analysis is *manual*.
+The exit criteria for the dynamic testing is *exhaustion* of the test cases. The exit criteria for the manual code analysis is *manual*.
 
 ##### 10. Vulnerability to False Positives
 
@@ -500,11 +500,11 @@ The threat assessment is done *manually*, though the manual code-based analysis.
 
 *E. Systematic Fuzzing and Testing of TLS Libraries*
 
-This paper presents TLS-Attacker, an open source framework for evaluating the security of TLS libraries throught the creation of custom TLS message flows and the arbitrary modification of message contents. This framework is used to mount a two-stage fuzzing approach to evaluate TLS server behavior. 
+This paper presents TLS-Attacker, an open source framework for evaluating the security of TLS libraries through the creation of custom TLS message flows and the arbitrary modification of message contents. This framework is used to mount a two-stage fuzzing approach to evaluate TLS server behavior. 
 
 ##### 1. Type
 
-The type of testing done is *dynamic testing*. The two stage approach is to first perform restricted *random fuzzzing* specifically targeted at triggering Bleichenbacher's attack, padding oracle attacks, invalid curve attacks, and POODLE. In the second stage, three phases of attacks are performed, but they all use *mutation-based fuzzing* to send protocol flows with randomly modified variables.
+The type of testing done is *dynamic testing*. The two stage approach is to first perform restricted *random fuzzing* specifically targeted at triggering Bleichenbacher's attack, padding oracle attacks, invalid curve attacks, and POODLE. In the second stage, three phases of attacks are performed, but they all use *mutation-based fuzzing* to send protocol flows with randomly modified variables.
 
 ##### 2. Accessibility
 
