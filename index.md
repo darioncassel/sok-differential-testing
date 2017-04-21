@@ -511,7 +511,7 @@ N/A
 
 ##### 1. Spurious Warnings?
 
-This form of testing is *not vulnerable to false positives*.
+This form of testing is *not vulnerable* to spurious warnings
 
 ##### 2. Missed Bugs?
 
@@ -571,7 +571,7 @@ N/A
 
 ##### 1. Type
 
-*Model-checking*
+*Symbolic Model-checking*
 
 ##### 2. Model Generation
 
@@ -634,7 +634,7 @@ The exit criteria for the dynamic testing is *exhaustion* of the test cases.
 
 ##### 2. In-test Accessibility
 
-During the dynamic testing, the authors use FlexTLS to send arbitrary sequences of TLS messages to the implementations, and thus the dynamic testing is *black-box testing*. Since source code analysis is done duirng the static testing, it is *white-box testing*.
+During the dynamic testing, the authors use FlexTLS to send arbitrary sequences of TLS messages to the implementations, and thus the dynamic testing is *black-box testing*.
 
 ##### 3. Injection Vector
 
@@ -840,7 +840,7 @@ The approach uses a form of differential testing with structurally different TLS
 
 ##### 5. Oracle Specification
 
-Since the oracle is not an one specific reference implementation, it is not formally specified or generated.
+Since the oracle is not one specific reference implementation, it is not formally specified or generated.
 
 ##### 6. Exit Criteria
 
