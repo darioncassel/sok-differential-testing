@@ -277,21 +277,19 @@ Finally, we consider how the discovered vulnerabilities are corresponded to viol
 
 To summarize, each methodology shall be classified using these metrics:
 
-(9) Core Properties
+(6) Core Properties
 1. Type
 2. Test Scope
-3. Pre-test Accessibility
-4. In-test Accessibility
-5. Post-test Accessibility
-6. Exceptional Element
-7. Test Oracle
-8. Oracle Specification
-9. Exit Criteria
+3. Exceptional Element
+4. Test Oracle
+5. Oracle Specification
+6. Exit Criteria
 
-(3) Dynamic Testing Properties
+(4) Dynamic Testing Properties
 1. Type
-2. Injection Vector
-3. Instrumentation
+2. In-test Accessibility
+3. Injection Vector
+4. Instrumentation
 
 (2) Static Testing Properties
 1. Type
@@ -301,7 +299,7 @@ To summarize, each methodology shall be classified using these metrics:
 1. Spurious Warnings?
 2. Missed Bugs?
 2. Form of Vulnerabilities
-3. Threat Assessment of Vulnerabilities
+3. Threat Assessment
 
 #### Classifications
 
@@ -318,31 +316,19 @@ The Frankencerts paper uses a *dynamic testing approach*.
 
 The scope is *system testing*. Although the authors are attempting to test just certificate validation, they must run the full implementations as the SUT and could theoretically receive faults from other parts of the system than the certificate validation subsystem.
 
-##### 3. Pre-test Accessibility
-
-*Black-box*; before testing, the authors did not look into the source code of the implementations to be tested.
-
-##### 4. In-test Accessibility
-
-This methodology uses *black-box* testing; the tests have no knowledge of the source code; the SUT is viewed purely as an input/output machine.
-
-##### 5. Post-test Accessibility
-
-After the testing phase, the authors had to manually look through the results of testing in order to diagnose the root causes and assess threat levels; thus, this is *white-box*
-
-##### 6. Exceptional Element
+##### 3. Exceptional Element
 
 The exceptional element is presented as an *exceptional input*, in this case a "frankencert" which is a X.509 certificate automatically generated from a set of sample input data (other certificates).
 
-##### 7. Test Oracle
+##### 4. Test Oracle
 
 The test oracle is a *reference implementation*, but is a bit more nuanced than that; in the case of this approach the test oracle is discrepancies between the behavior of the implementations, given that each implementation is presented with the same frankencert.
 
-##### 8. Oracle Specification
+##### 5. Oracle Specification
 
-Since there is no single reference implementation, the specification must be *manually determined*. That means, for each discrepancy uncovered the authors must manually determine which of the conflicting behaviors is correct and what specifically is the fault.
+Since there is no single reference implementation the oracle specification is N/A.
 
-##### 9. Exit Criteria
+##### 6. Exit Criteria
 
 The exit criteria is *exhaustion*. Once all of the test case data was exhausted, the testing ended.
 
@@ -352,11 +338,15 @@ The exit criteria is *exhaustion*. Once all of the test case data was exhausted,
 
 This methodology uses *mutation-based fuzzing* wherein a sample of input data is permuted to form new test cases.
 
-##### 2. Injection Vector
+##### 2. In-test Accessibility
+
+This methodology uses *black-box* testing; the tests have no knowledge of the source code; the SUT is viewed purely as an input/output machine.
+
+##### 3. Injection Vector
 
 The injection vector is *server-interaction*. The authors set up a server that would present connecting clients (running one of the SSL/TLS libraries) with a frankencert.
 
-##### 3. Instrumentation
+##### 4. Instrumentation
 
 The instrumentation is *in-band*. The clients set up by the authors record the answers, including error codes, given by the SSL/TLS implementations when presented with the frankencert.
 
@@ -364,6 +354,7 @@ The instrumentation is *in-band*. The clients set up by the authors record the a
 
 ##### 1. Type
 N/A
+
 ##### 2. Model Generation
 N/A
 
@@ -381,9 +372,9 @@ This methodology is by no means exhaustive in testing certificate validation and
 
 The form of vulnerabilities is *exceptional traces*, as mentioned, answers and error codes from the implementations are recorded.
 
-##### 4. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment
 
-The threat assessment of vulnerabilities must be done *manually*. If a given implementation has a discrepancy, it must be carefully tested (manually) to determine what caused that discrepancy.
+The threat assessment of vulnerabilities had to be done *manually*. If a given implementation had a discrepancy, it had to be carefully tested (manually) to determine what caused that discrepancy.
 
 
 *B. Not-quite-so broken TLS - Fuzzing*
@@ -400,31 +391,19 @@ The type of testing was *dynamic testing*.
 
 The test scope was *system testing*, in this case, the entirety of OpenSSL.
 
-##### 3. Pre-test Accessibility
-
-*Black-box* the authors did not inspect the OpenSSL source code prior to testing.
-
-##### 4. In-test Accessibility
-
-During the application of the Frankencert method, the testing was done in a *black-box* way.
-
-##### 5. Post-test Accessibility
-
-After testing, the accessibility was *white-box*; the authors tried to correlate test results with OpenSSL source code.
-
-##### 6. Exceptional Element
+##### 3. Exceptional Element
 
 This testing used *exceptional inputs*. The mutation-based fuzzing fed mutated certificates.
 
-##### 7. Test Oracle
+##### 4. Test Oracle
 
 The test oracle in the case of the mutation-based fuzzing testing was a *reference implementation*, nqsb-TLS.
 
-##### 8. Oracle Specification
+##### 5. Oracle Specification
 
 The specification was *manually-determined* based on knowledge of what is or is not supposed to be done as part of the TLS protocol.
 
-##### 9. Exit Criteria
+##### 6. Exit Criteria
 
 The exit criteria for the mutation-based fuzzing was *exhaustion* of the test set.
 
@@ -434,13 +413,25 @@ The exit criteria for the mutation-based fuzzing was *exhaustion* of the test se
 
 The type is specifically *mutation-based fuzzing* The Frankencert method was used to generate 10,000 X.509 certificate chains and these were given to nqsb-TLS.
 
-##### 2. Injection Vector
+##### 2. In-test Accessibility
+
+During the application of the Frankencert method, the testing was done in a *black-box* way.
+
+##### 3. Injection Vector
 
 The injection vector in was through *server-interaction*. A server presented the clients running nqsb-TLS and OpenSSL with the frankencerts.
 
-##### 3. Instrumentation
+##### 4. Instrumentation
 
 The instrumentation was an *in-band*, the authors could monitor whether the implementation accepted the frankencerts through its output.
+
+*Static Testing*
+
+##### 1. Type
+N/A
+
+##### 2. Model Generation
+N/A
 
 *Result Properties*
 
@@ -452,11 +443,11 @@ Since the frankencerts method was used this methodology was *not vulnerable* to 
 
 The testing was by no means exhaustive so this methodology is *vulnerable* to missed bugs.
 
-##### 11. Form of Vulnerabilities
+##### 3. Form of Vulnerabilities
 
 The faults discovered in OpenSSL were of the form of *counterexamples*; comparison to what nqsb-TLS did given a particular input.
 
-##### 12. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment of Vulnerabilities
 
 The threat assessment was performed *manually* for each recorded fault.
 
@@ -475,31 +466,19 @@ The type of testing was *dynamic testing*.
 
 The test scope was *system testing*, in this case, the entirety of nqsb-TLS.
 
-##### 3. Pre-test Accessibility
-
-*Black-box*; the attackers had no access to the system prior to testing.
-
-##### 4. In-test Accessibility
-
-A public server was set up and left exposed to attackers. This is a *black-box* method since the attackers had no access to the source code for nqsb-TLS.
-
-##### 5. Post-test Accessibility
-
-Since no breaches were made it is hard to say, but it can be presumed that the authors would have looked into the source code for nqsb-TLS; *white-box*.
-
-##### 6. Exceptional Element
+##### 3. Exceptional Element
 
 *Exceptional inputs*; the penetration testing gave inputs to the server.
 
-##### 7. Test Oracle
+##### 4. Test Oracle
 
 For the penetration testing, there oracle was *manual inspection*; whether a successful attack could occur or not.
 
-##### 8. Oracle Specification
+##### 5. Oracle Specification
 
 Since the oracle is manual there is no specification.
 
-##### 9. Exit Criteria
+##### 6. Exit Criteria
 
 The exit criteria for the penetration testing was *manual*, after a period of time the testing ended.
 
@@ -509,13 +488,25 @@ The exit criteria for the penetration testing was *manual*, after a period of ti
 
 *penetration-testing*
 
-##### 2. Injection Vector
+##### 2. In-test Accessibility
+
+A public server was set up and left exposed to attackers. This is a *black-box* method since the attackers had no access to the source code for nqsb-TLS.
+
+##### 3. Injection Vector
 
 The injection vector was through *server-interaction*.
 
-##### 3. Instrumentation
+##### 4. Instrumentation
 
 The instrumentation was an *out-of-band*, the authors could could track attack traces on the public server.
+
+*Static Testing*
+
+##### 1. Type
+N/A
+
+##### 2. Model Generation
+N/A
 
 *Result Properties*
 
@@ -527,11 +518,11 @@ This form of testing is *not vulnerable to false positives*.
 
 This form of testing is *vulnerable* to missed bugs as it is not exhaustive.
 
-##### 11. Form of Vulnerabilities
+##### 3. Form of Vulnerabilities
 
 No vulnerabilities were discovered with nqsb-TLS.
 
-##### 12. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment
 
 N/A
 
@@ -540,53 +531,71 @@ N/A
 
 The authors of this paper attempted to analyze the SSL protocol using a finite-state enumeration tool called Mur$\phi$. They completed the analysis by using a sequence of incremental approximations to the SSL 3.0 handshake that is then model-checked using Mur$\phi$. Though this methodology they discovered some anomalies in the session resumption protocol.
 
+*Core Properties*
+
 ##### 1. Type
 
-This paper uses a finite-state analysis tol and thus is a form of *static testing*; specifically, *model-checking*.
+This paper uses a finite-state analysis tool and thus is a form of *static testing*.
 
-##### 2. Accessibility
+##### 2. Test Scope
 
-The accessibility of artifacts was *white-box*; the authors had access to the protocol code and were specifically developing a "rational reconstruction" of the protocol.
+The test scope was *component testing*; only the SSL 3.0 handshake was under consideration. 
 
 ##### 3. Exceptional Element
 
 The finite state analysis tool Mur$\phi$ presents an *execution trace*, which in ths case is a sequence of states from the start state to a state exhibiting the problem; a counterexample to a guarantee that some invariant is held by the program.
 
-##### 4. Injection Vector
-
-Since this is static testing, no injection vector is present.
-
-##### 5. Instrumentation
-
-Since this is static testing, no instrumentation is present.
-
-##### 6. Test Oracle
+##### 4. Test Oracle
 
 The test oracle in this case is a *specification* of invariants. 
 
-##### 7. Specification
+##### 5. Oracle Specification
 
-The form of the specification is a set of Boolean conditions that have to be true in every reachable state; essentially they bound what a "safe" state is. This had to be *manually determined* from the authors' knowledge of the SSL protocol.
+The form of the specification is a set of Boolean conditions that have to be true in every reachable state; essentially they bound what a "safe" state is. This had to be *manually determined* from the authors' knowledge of the SSL protocol; the authors had access to the protocol code and were specifically developing a "rational reconstruction" of the protocol.
 
-##### 8. Test Scope
-
-The test scope was *component testing*; only the SSL 3.0 handshake was under consideration. 
-
-##### 9. Exit Criteria
+##### 6. Exit Criteria
 
 The exit criteria was *coverage*, the Mur$\phi$ tool exhaustively tests all possible interleavings of protocol and intruder actions to ensure that a set of correctness conditions is satisfied in all cases.
 
-##### 10. Vulnerability to False Positives
+*Dynamic Testing Properties*
+
+##### 1. Type
+N/A
+##### 2. In-test Accessibility
+N/A
+##### 3. Injection Vector
+N/A
+##### 3. Instrumentation
+N/A
+
+*Static Testing Properties*
+
+##### 1. Type
+
+*Model-checking*
+
+##### 2. Model Generation
+
+The model had to be specified *manually* in the Mur$\phi$ tool's design language.
+
+*Result Properties*
+
+##### 1. Spurious Warnings?
 
 Although Mur$\phi$ was not vulnerable to false positives since it is a model-checker, it did uncover problems that were not necessarily direct threats to the security of SSL 3.0. 
 
-##### 11. Form of Vulnerabilities
+##### 2. Missed Bugs?
+
+Since the Mur$\phi$ exhaustively tests the model, it is *not vulnerable* to missed bugs.
+
+##### 3. Form of Vulnerabilities
 
 The form of the anomalies was *counterexamples* as is typical of model-checking.
 
-##### 12. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment of Vulnerabilities
 
 The threat assessment of the anomalies was done *automatically* though the generation of a potential attack. 
+
 
 *D. A Messy State of the Union*
 
