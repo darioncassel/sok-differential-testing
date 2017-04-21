@@ -198,7 +198,6 @@ We shall be looking at the following approaches:
 - "Systematic Fuzzing and Testing of TLS Libraries" [Somorovsky]  (*Systematic Fuzzing and Testing of TLS Libraries*)
 - "Protocol state fuzzing of TLS implementations" [Ruiter]  (*Protocol state fuzzing of TLS implementations*)
 - "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing" [Walz]  (*Testing Embedded TLS Implementations*)
-- "Goanna—A Static Model Checker" [Fehnker]  (*Goanna—A Static Model Checker*)
 
 #### Framework for Methodology and Result Classification
 
@@ -447,7 +446,7 @@ The testing was by no means exhaustive so this methodology is *vulnerable* to mi
 
 The faults discovered in OpenSSL were of the form of *counterexamples*; comparison to what nqsb-TLS did given a particular input.
 
-##### 4. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment
 
 The threat assessment was performed *manually* for each recorded fault.
 
@@ -592,7 +591,7 @@ Since the Mur$\phi$ exhaustively tests the model, it is *not vulnerable* to miss
 
 The form of the anomalies was *counterexamples* as is typical of model-checking.
 
-##### 4. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment
 
 The threat assessment of the anomalies was done *automatically* though the generation of a potential attack. 
 
@@ -669,7 +668,7 @@ The authors attempt to reduce false positives by using verified messaging librar
 
 The form of vulnerabilities is *exceptional traces*, errors from the SUT.
 
-##### 4. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment
 
 The threat assessment is done *manually*, though the manual code-based analysis.
 
@@ -744,7 +743,7 @@ This method is *vulnerable* to false positives.
 
 The form of vulnerabilities is *exceptional traces* both in terms of the output of AddressSanitizer and the TLS context analyzer.
 
-##### 4. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment
 
 The threat assessment had to be completed *manually*. Each potential vulnerability was analyzed by the authors.
 
@@ -812,13 +811,76 @@ This methodology is *vulnerable* to false positives since any misbehavior must b
 
 The form of vulnerabilities is the *manually-inspected behavior* of the generated model.
 
-##### 4. Threat Assessment of Vulnerabilities
+##### 4. Threat Assessment
 
 Threat assessment is done *manually*, if a spurious behavior is noticed in a generated model of a particular implementation, the authors then manually inspect the source code of that implementation.
 
+
 *G. Testing Embedded TLS Implementations*
 
-*H. Goanna—A Static Model Checker*
+The authors present a methodology for the systematic testing of TLS implementations in the context of embedded devices such as Cyber Physical Systems. The authors leverage the principles behind the Frankencerts method and lift that system into the space of testing the entirety of the TLS implementation.
+
+*Core Properties*
+
+##### 1. Type
+
+*Dynamic testing*
+
+##### 2. Test Scope
+
+*System testing*
+
+##### 3. Exceptional Element
+
+*Exceptional input*
+
+##### 4. Test Oracle
+
+The approach uses a form of differential testing with structurally different TLS implementations of different origins. Thus, the test oracle is form of *reference implementation*.
+
+##### 5. Oracle Specification
+
+Since the oracle is not an one specific reference implementation, it is not formally specified or generated.
+
+##### 6. Exit Criteria
+
+*Exhaustion*
+
+*Dynamic Testing*
+
+##### 1. Type
+
+*Mutation-based fuzzing*
+
+##### 2. In-test Accessibility
+
+*Black-box*
+
+##### 3. Injection Vector
+
+*Simulated interaction*
+
+##### 4. Instrumentation
+
+*In-band*
+
+*Static Testing*
+
+##### 1. Type
+N/A
+##### 2. Model Generation
+N/A
+
+*Results*
+
+##### 1. Spurious Warnings?
+*Vulnerable*
+##### 2. Missed Bugs?
+*Vulnerable*
+##### 3. Form of Vulnerabilities
+*Exceptional traces*
+##### 4. Threat Assessment
+*Manually*
 
 
 ### V. Comparison of Methodologies and Results
