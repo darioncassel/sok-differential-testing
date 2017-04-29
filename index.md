@@ -287,7 +287,7 @@ To summarize, each methodology shall be classified using these metrics:
 2. Form of Vulnerabilities
 3. Threat Assessment
 
-### IV. Classifications
+### IV. Classifications of Methodologies and Results
 
 We shall be looking at the following 'representative approaches' that were chosen because they present an archetype of a particular approach. We tried to ensure that we don't duplicate coverage of similar approaches:
 
@@ -306,15 +306,16 @@ The Frankencerts paper implemented a methodology for large-scale testing of cert
 *Core Properties* 
 
 ##### 1. Type
-The Frankencerts paper uses a *dynamic testing approach*.
+
+The Frankencerts paper uses a *dynamic testing* approach.
 
 ##### 2. Test Scope
 
-The scope is *system testing*. Although the authors are attempting to test just certificate validation, they must run the full implementations as the SUT and could theoretically receive faults from other parts of the system than the certificate validation subsystem.
+The scope is *system testing*. Although the authors were attempting to test just certificate validation, they had to run the full implementations as the SUT and thus could theoretically receive faults from other parts of the system than the certificate validation subsystem.
 
 ##### 3. Exceptional Element
 
-The exceptional element is presented as an *exceptional input*, in this case a "frankencert" which is a X.509 certificate automatically generated from a set of sample input data (other certificates).
+The exceptional element is presented as an *exceptional input*, in this case a "frankencert," which is a X.509 certificate automatically generated from a set of sample input data (other certificates).
 
 ##### 4. Test Oracle
 
@@ -322,17 +323,17 @@ The test oracle is a *reference implementation*, but is a bit more nuanced than 
 
 ##### 5. Oracle Specification
 
-Since there is no single reference implementation the oracle specification is N/A.
+Since there is no single reference implementation, the SUT is a collection of implementations, it is not possible to classify the oracle specification is either manually-determined or automatically-generated. Thus, the oracle specification will be listed as N/A.
 
 ##### 6. Exit Criteria
 
-The exit criteria is *exhaustion*. Once all of the test case data was exhausted, the testing ended.
+The exit criteria is *exhaustion*. Once all of the generated test case data was exhausted, the testing ended. It should be noted that there is a high theoretical ceiling for how much test data could be generated so it is technically possible for this method to reach coverage, at least of the certificate validation sub-system, however the issue is that the coverage is in no way measured and thus it is not possible to assess when it has been reached.
 
 *Dynamic Testing Properties*
 
 ##### 1. Type
 
-This methodology uses *mutation-based fuzzing* wherein a sample of input data is permuted to form new test cases.
+This methodology uses *mutation-based fuzzing* wherein a sample of input data is permuted to form new test cases. Specifically, the authors use a set of valid X.509 certificates and then permute them separating them into pieces and randomly combining those pieces.
 
 ##### 2. In-test Accessibility
 
@@ -345,14 +346,6 @@ The injection vector is *server-interaction*. The authors set up a server that w
 ##### 4. Instrumentation
 
 The instrumentation is *in-band*. The clients set up by the authors record the answers, including error codes, given by the SSL/TLS implementations when presented with the frankencert.
-
-*Static Testing*
-
-##### 1. Type
-N/A
-
-##### 2. Model Generation
-N/A
 
 *Result Properties*
 
@@ -381,7 +374,7 @@ With the Not-quite-so-broken TLS, the authors of the paper sought to build a ref
 
 ##### 1. Type
 
-The type of testing was *dynamic testing*.
+The type of testing was *dynamic testing*. 
 
 ##### 2. Test Scope
 
@@ -389,19 +382,19 @@ The test scope was *system testing*, in this case, the entirety of OpenSSL.
 
 ##### 3. Exceptional Element
 
-This testing used *exceptional inputs*. The mutation-based fuzzing fed mutated certificates.
+This testing used *exceptional inputs*. The mutation-based fuzzing fed mutated certificates inspired by the mechanism of *Frankencerts*.
 
 ##### 4. Test Oracle
 
-The test oracle in the case of the mutation-based fuzzing testing was a *reference implementation*, nqsb-TLS.
+The test oracle in the case of the mutation-based fuzzing testing was a *reference implementation*, in this case, nqsb-TLS.
 
 ##### 5. Oracle Specification
 
-The specification was *manually-determined* based on knowledge of what is or is not supposed to be done as part of the TLS protocol.
+The specification was *manually-determined* based on knowledge of what is or is not supposed to be done as part of the TLS protocol. The main thrust of the paper was to reverse engineer a specification of TLS and then encode this discovered specification into a new implementation of TLS; nqsb-TLS.
 
 ##### 6. Exit Criteria
 
-The exit criteria for the mutation-based fuzzing was *exhaustion* of the test set.
+The exit criteria for the mutation-based fuzzing was *exhaustion* of the test set. Similarly to *Frankencerts*, once the generated test case data was exhausted, the testing ended.
 
 *Dynamic Testing Properties*
 
@@ -411,7 +404,7 @@ The type is specifically *mutation-based fuzzing* The Frankencert method was use
 
 ##### 2. In-test Accessibility
 
-During the application of the Frankencert method, the testing was done in a *black-box* way.
+During the application of the Frankencert method, the testing was done in a *black-box* way; the tests were executed at the level of viewing the SUT as an input/output machine; the tests had no access to the source code of the implementations.
 
 ##### 3. Injection Vector
 
@@ -419,15 +412,7 @@ The injection vector in was through *server-interaction*. A server presented the
 
 ##### 4. Instrumentation
 
-The instrumentation was an *in-band*, the authors could monitor whether the implementation accepted the frankencerts through its output.
-
-*Static Testing*
-
-##### 1. Type
-N/A
-
-##### 2. Model Generation
-N/A
+The instrumentation was an *in-band*, the authors could monitor whether either implementation accepted the frankencerts through the recorded output of the implementation.
 
 *Result Properties*
 
@@ -441,16 +426,16 @@ The testing was by no means exhaustive so this methodology is *vulnerable* to mi
 
 ##### 3. Form of Vulnerabilities
 
-The faults discovered in OpenSSL were of the form of *counterexamples*; comparison to what nqsb-TLS did given a particular input.
+The faults discovered in OpenSSL were of the form of *counterexamples*; they were comparisons to what nqsb-TLS did given a particular input. The comparisons could be used to (manually) pinpoint the root causes of vulnerabilities within OpenSSL.
 
 ##### 4. Threat Assessment
 
-The threat assessment was performed *manually* for each recorded fault.
+The threat assessment was performed *manually* for each recorded fault; the authors had to look though the source code of OpenSSL to find the root causes of vulnerabilities.
 
 
 *B. Not-quite-so broken TLS - Penetration Testing*
 
-This section will cover the second form of testing.
+This section will cover the second form of testing performed in the Not-quite-so broken TLS paper.
 
 *Core Properties*
 
@@ -460,19 +445,19 @@ The type of testing was *dynamic testing*.
 
 ##### 2. Test Scope
 
-The test scope was *system testing*, in this case, the entirety of nqsb-TLS.
+The test scope was *system testing*, in this case, the entirety of nqsb-TLS was the SUT. Technically, the nqsb-TLS was presented as part of a web-server ot potential attackers, so other pieces of the architecture were under test as well, but their faults were not considered as part of the authors' analysis.
 
 ##### 3. Exceptional Element
 
-*Exceptional inputs*; the penetration testing gave inputs to the server.
+*Exceptional inputs*; third-party attackers attempted to use whatever methods available to them to overcome the security of OpenSSL. Their point of access was input to the server.
 
 ##### 4. Test Oracle
 
-For the penetration testing, there oracle was *manual inspection*; whether a successful attack could occur or not.
+For the penetration testing, the oracle was a form of *manual inspection*; since the server was set up as a Bitcoin pinata, a successful attack on the server would amount to an oracle purporting a *failure*. Similarly, the lack of a successful attack could be viewed as a kind of *validation* of the SUT.
 
 ##### 5. Oracle Specification
 
-Since the oracle is manual there is no specification.
+Since the oracle was manual inspection of the server for successful attacks, there was no specification.
 
 ##### 6. Exit Criteria
 
@@ -482,7 +467,7 @@ The exit criteria for the penetration testing was *manual*, after a period of ti
 
 ##### 1. Type
 
-*penetration-testing*
+As remarked, this form of testing was *penetration-testing* where the implementation was given to attempted attacks from malicious third party sources.
 
 ##### 2. In-test Accessibility
 
@@ -490,37 +475,29 @@ A public server was set up and left exposed to attackers. This is a *black-box* 
 
 ##### 3. Injection Vector
 
-The injection vector was through *server-interaction*.
+The injection vector was through *server-interaction*; the attackers could try to attack by communicating with the server and the nqsb-TLS implementation.
 
 ##### 4. Instrumentation
 
-The instrumentation was an *out-of-band*, the authors could could track attack traces on the public server.
-
-*Static Testing*
-
-##### 1. Type
-N/A
-
-##### 2. Model Generation
-N/A
+The instrumentation was an *out-of-band*, the authors could could track traces of attacks on the server.
 
 *Result Properties*
 
 ##### 1. Spurious Warnings?
 
-This form of testing is *not vulnerable* to spurious warnings
+This form of testing is *not vulnerable* to spurious warnings; any successful form of attack (given that the attack exploited a property of nqsb-TLS) should be viewed as the existence of some vulnerability in nqsb-TLS.
 
 ##### 2. Missed Bugs?
 
-This form of testing is *vulnerable* to missed bugs as it is not exhaustive.
+This form of testing is *vulnerable* to missed bugs as it is clearly not exhaustive; the public server was available only for a finite period of time and no measure of coverage was taken.
 
 ##### 3. Form of Vulnerabilities
 
-No vulnerabilities were discovered with nqsb-TLS.
+No vulnerabilities were discovered with nqsb-TLS as there were no successful attacks on the server. Thus, this must be marked as N/A.
 
 ##### 4. Threat Assessment
 
-N/A
+Likewise, since no vulnerabilities were uncovered, there was no opportunity for threat assessment; this is also N/A.
 
 
 *C. Finite-State Analysis of SSL 3.0*
