@@ -28,15 +28,15 @@ Darion Cassel<sup>1</sup>, David Evans<sup>1</sup>
 
 #### Abstract
 
-TLS/SSL implementations have been shown to be have a slew of vulnerabilities that can lead to violation of its fundamental security properties. We classify current approaches to the testing of TLS implementations through the use of established taxonomies developed in the field of software engineering. Through the lens of this categorization, we assert that security protocol implementation vulnerabilities should be treated differently from traditional software faults because they are a violation of *two levels* of specification. On one level, they are an exceptional state of some protocol implementation’s state machine. On another level, they are a violation of a protocol model with the consequence of a violation of some security property that model intends to guarantee. No current approaches work on both levels but we believe that in order to discover a security fault and understand the implications of that fault without human intervention an approach must be able to combine information from both levels of testing. We present a cohesive workflow that combines two approaches in order to discover faults and classify the semantic threat of those faults concurrently.
+TLS/SSL implementations have been shown to be have a slew of vulnerabilities that can lead to violation of fundamental security properties. We classify current approaches to the testing of TLS implementations through the use of established taxonomies developed in the field of software engineering. Through the lens of this categorization, we assert that security protocol implementation vulnerabilities should be treated differently from traditional software faults because they are a violation of *two levels* of specification. On one level, they are an exceptional state of some protocol implementation’s state machine. On another level, they are a violation of a protocol model with the consequence of breaking some security property that model intends to guarantee. No current approaches work on both levels but we believe that in order to discover a security fault and understand the implications of that fault without human intervention an approach must be able to combine information from both levels of testing. We present a cohesive workflow that combines two approaches in order to discover faults and classify the semantic threat of those faults concurrently.
 
 
 ### I. Introduction
 TLS/SSL was originated by the company *Netscape* in 1994 in order to solve the problem of securing HTTP traffic [1]. Netscape never released version 1.0 of its Secure Sockets Layer protocol (SSL) due to the discovery of serious security flaws in the protocol, but went on to release version 2.0 to the public in February of 1995. However, this version too contained many security flaws, leading to a redesign of the protocol and the release of version 3.0 in 1996 [2]. The name Transport Layer Security (TLS) was given to an upgrade of SSL version 3.0 called TLS 1.0 which was defined in January 1999 and was not meant to be inter-operable with SSL 3.0 [3]. 
 
-Over the years many vulnerabilities have been found in TLS/SSL leading to the release of new versions of the protocol. TLS 1.1 was defined in April of 2006 in order to add protection against *cipher-block chaining* (CBC) attacks [4]. TLS 1.2 was defined in August of 2008 and it added *authenticated encryption*, removing the need for streaming and block ciphers and thus removing vulnerability to CBC attacks [5]. SSL 2.0 was formally deprecated in March of 2011. In June of 2011 the BEAST attack [6] exploiting predictable *initialization vectors* IVs is released. Although the changes of TLS 1.1 and TLS 1.2 protect against BEAST, the adoption was slow of these updates leading to a large swath of vulnerable servers. In September of 2012 Duong and Rizzo release the CRIME attack which exploits TLS compression [7], leading to a rollback of that feature. In February of 2013 the Lucky Thirteen attack is released that executes *padding oracle* attacks against CBC suites [8]. In October of 2014 the publication of the POODLE attack that also leverages a padding oracle to perform a man-in-the-middle attack leads to SSL version 3.0 being considered insecure [9]. SSL version 3.0 is formally deprecated in June of 2015 [10]. Work on TLS version 1.3 has begun as of July of 2016.
+Over the years many vulnerabilities have been found in TLS/SSL leading to the release of new versions of the protocol. TLS 1.1 was defined in April of 2006 in order to add protection against *cipher-block chaining* (CBC) attacks [4]. TLS 1.2 was defined in August of 2008 and it added *authenticated encryption*, removing the need for streaming and block ciphers and thus removing vulnerability to CBC attacks [5]. SSL 2.0 was formally deprecated in March of 2011. In June of 2011 the BEAST attack [6] exploiting predictable *initialization vectors* (IVs) is released. Although the changes of TLS 1.1 and TLS 1.2 protect against BEAST, the adoption was slow of these updates leading to a large swath of vulnerable servers. In September of 2012 Duong and Rizzo release the CRIME attack which exploits TLS compression [7], leading to a rollback of that feature. In February of 2013 the Lucky Thirteen attack is released that executes *padding oracle* attacks against CBC suites [8]. In October of 2014 the publication of the POODLE attack that also leverages a padding oracle to perform a man-in-the-middle attack leads to SSL version 3.0 being considered insecure [9]. SSL version 3.0 is formally deprecated in June of 2015 [10]. Work on TLS version 1.3 has begun as of July of 2016.
 
-According to a classic definition from the field of software engineering, software testing consists of the dynamic verification that a program provides expected behaviors on a finite set of test cases [11]. However, this definition is too coarse for our purposes as software testing has evolved into a wide and diversified field. The primary difference between various approaches to testing lies in the level of human involvement required to facilitate the testing. On one end of the spectrum lies manual code review, where an individual reads over the source code of a program and attempts to find faults in it [12]. At the other end of the spectrum is fully automated testing requiring no interaction from an individual once testing has commenced [12]. We will focus on the automated testing landscape. Within this subfield, several theories and methodologies have been extracted and used for the discovery of security vulnerabilities.
+According to a classic definition from the field of software engineering, software testing consists of the dynamic verification that a program provides expected behaviors on a finite set of test cases [11]. However, this definition is too coarse for our purposes as software testing has evolved into a wide and diversified field. The primary difference between various approaches to testing lies in the level of human involvement required to facilitate the testing. On one end of the spectrum lies manual code review, where an individual reads over the source code of a program and attempts to find faults in it [12]. At the other end of the spectrum is fully automated testing requiring no interaction from an individual once testing has commenced [12]. We will focus on the automated testing landscape. Within this sub-field, several theories and methodologies have been extracted and used for the discovery of security vulnerabilities.
 
 The main approaches to testing can be classified at a high level by their level of abstraction. At the lowest level there is dynamic analysis of a running system, followed by static analysis of a code base, and finally at the highest level there is model-checking. Despite there being a wide literature of testing security protocols for vulnerabilities, we find that the there is a clear separation to these approaches leading to inherent limitations for each category in terms the kinds of security vulnerabilities they can discover. Furthermore, there is a lack of a cohesive framework to place each approach into a distinct category such that its merits can be evaluated in terms of its peers.
 
@@ -44,7 +44,7 @@ We are motivated to provide a framework for the classification of security proto
 
 Our primary contributions are: (1) Establishing a framework for fine-grained classification of security protocol testing methodologies. (2) Determining a framework for the categorization and evaluation of the results of different testing approaches. (3) Providing a holistic comparison of multiple approaches on the basis of their classification and the classification of their results. (4) Proposing a 'combined approach' that leverages two or more distinct approaches to discover a security vulnerability at the level of an exceptional state of a protocol implementation and to determine the threat or meaning of the vulnerability by concurrently determining the way in which it violates the protocol model's security guarantees. (5) Identification of challenges for future research. 
 
-In Section II, we provide background on TLS/SSL at the protocol level and define terminology for software testing and protocol verification. Then, in Section III, we give a classification of methodologies followed by a classification of possible results in Section IV. We provide a comparison of methodologies and results in Section V, and present a combined approach and its results in Section VI-VII. Finally we discuss related works in Section VIII and conclude with a discussion of possible future research in Section IX.
+In Section II, we provide background on TLS/SSL at the protocol level and define terminology for software testing and protocol verification. Then, in Section III, we give a framework for the classification of methodologies and their results. In Section IV we proceed to use this framework to classify a series of 'representative approaches'. We provide a comparison of methodologies and results in Section V, and present a combined approach and its results in Section VI-VII. Finally we discuss related works in Section VIII and conclude with a discussion of possible future research in Section IX.
 
 
 ### II. Background and Definitions
@@ -55,34 +55,32 @@ The TLS protocol is designed to provide encryption, authentication, and data int
 
 *A. The TLS Handshake*
 
-Let us consider two parties, Alice and Bob. The primary goal of the handshake is to provide "privacy and reliability" [CITE: verifying SSL] for Alice and Bob's communications through the establishment of secret keys. 
+Let us consider two parties, Alice and Bob. The primary goal of the handshake is to provide privacy and reliability for Alice and Bob's communications through the establishment of secret keys. 
 
 <center><img src="https://hpbn.co/assets/diagrams/b83b75dbbf5b7e4be31c8000f91fc1a8.svg" alt="TLS Handshake" style="width:800px;"/><br>
-<sup>TLS Handshake</sup></center>
+<sup>Fig. 1: TLS Handshake [13] </sup></center>
 
-At a fundamental level, the handshake consists of three messages. The first is the *ClientHello* message with which Alice initiates the protocol, transmits her SSL/TLS version number and sends a set of cryptographic algorithms she supports called the *ciphersuite*. 
+At a fundamental level, the handshake consists of three messages. The first is the *ClientHello* message with which Alice initiates the protocol, transmits her SSL/TLS version number and sends a set of cryptographic algorithms she supports called the *ciphersuite*.
 
 Bob will then reply with the *ServerHello* message that has his choice of TLS protocol version, a choice of ciphersuite, and his certificate. When Alice receives this messages she must perform certificate validation on the Bob's certificate, and must agree to the choices of protocol version and ciphersuite. 
 
 If Alice accepts Bob's certificate and accepts the shared SSL/TLS version and cipher, then the client initiates a *key exchange protocol*, namely RSA or Diffie-Hellman, which allows for the establishment of a symmetric key to be used for the rest of the connection.
 
-// CHECKTHIS
-It should be noted that SSL 3.0 onwards supports *session resumption*. During the first run of the TLS protocol between Alice and Bob, they go through the full handshake protocol as detailed above. However, on future connections, session resumption allows for reconnection without use of the an abbreviated handshake. Specifically, if Alice sends a ClientHello message that includes a *session identifier* of a session that Bob has recorded as active, then Bob will assume that Alice wants to resume that previous session. A new secret is not exchanged, instead the previous keys are recomputed with new nonces and used. 
+It should be noted that SSL 3.0 onwards supports *session resumption* [33]. During the first run of the TLS protocol between Alice and Bob, they go through the full handshake protocol as detailed above. However, on future connections, session resumption allows for re-connection without use of the an abbreviated handshake. Specifically, if Alice sends a ClientHello message that includes a *session identifier* of a session that Bob has recorded as active, then Bob will assume that Alice wants to resume that previous session. A new secret is not exchanged, instead the previous keys are recomputed with new nonces and used. 
 
 *B. Certificate Validation*
 
-X.509 certificate validation is perhaps the most complex piece of the TLS handshake protocol. It involves the use of a transitive process called *chain of trust verification*. Each SSL/TLS client trusts a certain number of certificate authorities (CAs) whose X.509 certificates are usually included with the client's Operating System or browser. [CITE: frankencerts] This is considered to be the client's *root of trust*.
+X.509 certificate validation is perhaps the most complex piece of the TLS handshake protocol. It involves the use of a transitive process called *chain of trust verification*. Each SSL/TLS client trusts a certain number of certificate authorities (CAs) whose X.509 certificates are usually included with the client's Operating System or browser [32]. This is considered to be the client's *root of trust*.
 
 <center><img src="https://hpbn.co/assets/diagrams/bb75b8bd469ce5b703b76abb7042e978.svg" alt="Chain of Trust" style="width:800px;"/><br>
 <sup>Certificate Chain of Trust</sup></center>
 
-Each X.509 certificate that the client receives from a server it is attempting to connect with has an *issuer* field that contains the name of the certificate authority (CA) that issued the certificate. This server certificate is required to be accompanied by the certificate of the issuing CA, and if that issuer is not a *root CA*, then all of the certificates up to the root CA need to be included. It is this chain of certificates going from a server certificate to a root CA, the chain of trust, that needs to be validated by the client. Due to the complexity of the X.509 certificates themselves, this is not a simple task. Some of the checks involved in validating the chain are [CITE: RFC 5280]:
+Each X.509 certificate that the client receives from a server it is attempting to connect with has an *issuer* field that contains the name of the certificate authority (CA) that issued the certificate. This server certificate is required to be accompanied by the certificate of the issuing CA, and if that issuer is not a *root CA*, then all of the certificates up to the root CA need to be included. It is this chain of certificates going from a server certificate to a root CA, the chain of trust, that needs to be validated by the client. Due to the complexity of the X.509 certificates themselves, this is not a simple task. Some of the checks involved in validating the chain are [14]:
 
 - Checking that each certificates in the chain is signed by a CA immediately above it and the root of the chain is a client's trusted root CA.
 - If the certificate is a version 1 or version 2 certificate then the client must either reject it or verify it by out-of-band means
 - Certificates can have extensions. Each of these is either designated as *critical* or *non-critical*. A certificate with an unrecognized (by the client) critical extension must be rejected.
-- IF a certificate contains a *name constraints* extension, then the subject name in the next certificate in the chain must satisfy those name constraints. This is considered a critical extension.
-- //ADDMORE
+- If a certificate contains a *name constraints* extension, then the subject name in the next certificate in the chain must satisfy those name constraints. This is considered a critical extension.
 
 It is due to this complexity that the certificate validation phase of the TLS protocol is a hotbed of security vulnerabilities.
 
@@ -91,15 +89,15 @@ It is due to this complexity that the certificate validation phase of the TLS pr
 Similarly to TCP or IP, data that is exchanged within a TLS session is framed using a protocol. The record protocol allows for the identification of different types of messages, either handshake, alert, or data, via the *Content Type* field, and includes authentication of the encrypted data via a *message authentication code* (MAC).
 
 <center><img src="https://hpbn.co/assets/diagrams/4603275cd98c93aeb8c46b1b1afa0ba6.svg" alt="TLS Record Structure" style="width:800px;"/><br>
-<sup>TLS Record Structure</sup></center>
+<sup>Fig. 2: TLS Record Structure [13]</sup></center>
 
 The process for delivering application data using the record protocol is that the data is divided into blocks of a maximum size of 16 KB. A MAC or HMAC is then added to each block and the data is encrypted using the ciphersuite that was negotiated during the handshake. Depending on the ciphersuite being used, padding might be added to the data. The reverse of this process is used by the client when it receives a frame of data.
 
 #### Software Security Testing Background and Definitions
 
-In a classical sense, *software testing* consists of the dynamic verification that a program provides expected behaviors on a finite set of *test cases* called a *test suite*. Closely related is the notion of *dynamic testing* that evaluates software by observing its execution. On the other hand, *Static testing* checks *software development artifacts* (i.e requirements, design, or code) without the execution of these artifacts. Static testing is usually performed either through *manual reviews* or *automated analysis*.
+In a classical sense, *software testing* consists of the dynamic verification that a program provides expected behaviors on a finite set of *test cases* called a *test suite* [11]. Closely related is the notion of *dynamic testing* that evaluates software by observing its execution [15]. On the other hand, *Static testing* checks *software development artifacts* (i.e requirements, design, or code) without the execution of these artifacts. Static testing is usually performed either through *manual reviews* or *automated analysis*.
 
-After a particular test case is executed, the observed and intended behaviors of the *software under test* (SUT) are compared, resulting in a *verdict* that is either:
+After a particular test case is executed, the observed and intended behaviors of the *software under test* (SUT) are compared, resulting in a *verdict* that is either [16]:
 - *Pass*: the behaviors conform
 - *Fail*: the behaviors do not conform
 - *Inconclusive*: it cannot be determined whether the behaviors conform.
@@ -108,18 +106,18 @@ The mechanism that is used for determine the verdict is called the *test oracle*
 
 In the event of a *failure*, which is an undesired behavior that either fails validation or verification, a cause of failure called a *fault* may be assigned to it.
 
-A fault can be either:
+A fault can be either [17]:
 - A *static defect* in the software caused by human error in the specification, design or coding process.
 - A *behavioral description* of how the software deviates from the intended behavior.
 - A *vulnerability*, which is fault that is a *security flaw* and results in a violation of a security property.
 
 The meaning of vulnerability is one of two things, either the security mechanism necessary for protecting against that vulnerability is missing, or the security mechanism has been implemented in a faulty way.
 
-The *exceptional element* is an the input that provokes an undesirable behavior in the SUT. The exceptional element can violate a protocol specification or it can sometimes be a legal input that exploits an ambiguity in the specification.
+The *exceptional element* is an the input that provokes an undesirable behavior in the SUT. The exceptional element can violate a protocol specification or it can sometimes be a legal input that exploits an ambiguity in the specification [18].
 
-The *instrumentation* used to monitor the SUT can be divided into two categories, *out-of-band instrumentation*, such as debuggers, and *in-band instrumentation*, which is added to the program via the test *injection vector*, the same interface used to give the test case to the SUT.
+The *instrumentation* used to monitor the SUT can be divided into two categories, *out-of-band instrumentation*, such as debuggers, and *in-band instrumentation*, which is added to the program via the test *injection vector*, the same interface used to give the test case to the SUT [18].
 
-*Security testing* verifies and validates software system requirements related to security properties. Typical security properties under test are:
+*Security testing* verifies and validates software system requirements related to security properties. Typical security properties under test are [19]:
 - *Confidentiality*, which is the assurance that information is not disclosed to unauthorized individuals, processes, or devices
 - *Integrity*, which is provided when data is unchanged from its source and has not been accidentally or maliciously modified, altered, or destroyed. 
 - *Availability*, which guarantees timely, reliable access to data and information services for authorized users.
@@ -127,7 +125,7 @@ The *instrumentation* used to monitor the SUT can be divided into two categories
 - *Authorization*, which provides access privileges granted to a user, program, or process.
 - *Non-repudiation*, which is the assurance that none of the partners taking part in a transaction can later deny of having participated.
 
-There are several paradigms for performing security testing depending on what stage during the application's development the testing occurs. However, it should be noted that testing methods from earlier stages can be used for later stages but methods from later stages cannot be used during earlier stages of the application development lifecycle.
+There are several paradigms for performing security testing depending on what stage during the application's development the testing occurs. However, it should be noted that testing methods from earlier stages can be used for later stages but methods from later stages cannot be used during earlier stages of the application development lifecycle [17].
 - *Model-based* security testing is grounded on requirements and design models created during the analysis and design phase. *Model-based testing* (MBT), manually selected algorithms automatically and systematically generate test cases from a set of models of the system under test or its environment
 - *Code-based* testing and static analysis on source and bytecode created during development
 - *Penetration testing and dynamic analysis* on running systems, either in a test or production environment
@@ -139,29 +137,30 @@ The *test scope* describes the granularity with which the SUT is being evaluated
 - System testing tests the system as a whole, including and subsets of components.
 - Regression testing is a form of selective testing that checks that certain software modifications have not resulted in faults.
 
-A *test plan* is a set of *test objectives*, *test scope*, and *test methods* that identifies features to be tested and *exit criteria* that define conditions when testing will end. A typical form of *exit criteria* is *coverage*, which measures how much of a particular program is reached during testing.
+A *test plan* is a set of *test objectives*, *test scope*, and *test methods* that identifies features to be tested and *exit criteria* that define conditions when testing will end [20]. A typical form of exit criteria is *coverage*, which measures how much of a particular program is reached during testing.
 
-The *accessibility* of software development artifacts under test is a measure of how much information is available *a prior* about the SUT.
+The *accessibility* of software development artifacts under test is a measure of how much information is available *a prior* about the SUT [11].
 - *White-box testing* uses test cases that are derived based on information about how the software has been designed or coded.
 - *Black-box testing* uses test cases that rely only on the input/output behavior of the software is available. It is frequently used in security testing where testing is often done to mimic external attacks from an adversary.
 
 As noted, black-box testing does not require access to source code or other development artifacts of the SUT. Testing is typically performed via interaction with the SUT using:
-- *Fuzzing*, which feeds random data to a program "until it crashes"
-- *Mutation-based fuzzing*, where the fuzzer has knowledge about the input format of the program under test, such as existing data samples.
-- *Generation-based fuzzing*, which uses a model of the input data for generating test data.
-- *Concolic testing*, which combines symbolic execution that is a static source code analysis technique with dynamic testing.
+- *Penetration testing*, in which the SUT is tested from "outside" in a setup that is comparable to an actual attack from a third party [113]
+- *Fuzzing*, which feeds random data to a program "until it crashes" [17].
+- *Mutation-based fuzzing*, where the fuzzer has knowledge about the input format of the program under test, such as existing data samples [22].
+- *Generation-based fuzzing*, which uses a model of the input data for generating test data [23].
+- *Concolic testing*, which combines symbolic execution that is a static source code analysis technique with dynamic testing [24].
 
-#### Background/Definitions on Protocol Verification
+#### Protocol Verification Background and Definitions
 
-*Abstract static analysis* is the automatic computation of information about the behavior of a program without executing. This kind of analysis is usually used to compute *approximate* but *sound* conjectures about the behavior of a program. We say that are sound because they are guaranteed to not be misleading.
+*Abstract static analysis* is the automatic computation of information about the behavior of a program without executing. This kind of analysis is usually used to compute *approximate* but *sound* conjectures about the behavior of a program. We say that are sound because they are guaranteed to not be misleading [25].
 
 The analysis process is vulnerable to two kinds of errors:
 - *A spurious warning*, which is an error message about a fault that does not exist in the program.
 - *A missed bug*, which means that the analysis procedure did not report a fault that actually exists in the program. 
 
-We say that a program analysis method is *flow sensitive* if the order of execution of statements in the program is considered, *path sensitive* if the analysis distinguishes between paths through a program and attempts to only consider feasible ones, *context sensitive* if method calls are analyzed differently based on the call site, and *inter-procedural* if the bodies of method calls are also analyzed.
+We say that a program analysis method is *flow sensitive* if the order of execution of statements in the program is considered, *path sensitive* if the analysis distinguishes between paths through a program and attempts to only consider feasible ones, *context sensitive* if method calls are analyzed differently based on the call site, and *inter-procedural* if the bodies of method calls are also analyzed [25].
 
-Protocol verification usually makes use of the *software model checking* methodology. This consists of a *model* of the program, which is a set of *states*, such as the evaluation of the program counter, the values of program variables, and the configuration fo the stack and heap, and a set of *transitions* that describe how the programs moves from one state to another.
+Protocol verification usually makes use of the *software model checking* methodology [26]. This consists of a *model* of the program, which is a set of *states*, such as the evaluation of the program counter, the values of program variables, and the configuration fo the stack and heap, and a set of *transitions* that describe how the programs moves from one state to another.
 
 In the context of model-checking, a *specification*, or *correctness property* is a literal logical formula of states and transitions. If a state violating a specification is found, a *counterexample*, which is an execution trace demonstrating the error, is produced.
 
@@ -172,34 +171,22 @@ Thus, we say that a model checker can return one of three results:
 
 Model checking tools verify *partial specifications* that are classified as *safety*, which expresses the unreachability of bad states, and *liveness*, which specifies that a "good" state is eventually reached, such as a request to a webserver being served eventually.
 
-The principle problem with vanilla model checking is *state-space explosion*, which means that the state-space of a software program is exponential in terms of its various parameters such as the number of variables and the width of the datatypes.
+The principle problem with vanilla model checking is *state-space explosion*, which means that the state-space of a software program is exponential in terms of its various parameters such as the number of variables and the width of the datatypes [27].
 
 The state-space explosion is particularly a problem with *explicit-state model checking algorithms* that directly index states and use graph algorithms to explore the state space. Some efficiency may be gained by checking for property violation *on-the-fly* with new states, such that the entire graph does not have to be built to perform the analysis. Other improvements include the compression of explored states that are then stored in a hashtable to ensure that their successors are not recomputed. Finally, *partial order reduction* is used to prune the state space exploration of concurrent programs.
 
 An alternative to explicit-state model checking algorithms is *symbolic model checking algorithms* that use implicit representations of sets of states. Common symbolic representations are 
-- *BDDs*, which are obtained from a *boolean decision tree* and permit boolean functional equivalence for efficient checking
-- *Propositional logic for finite sets*, which are more memory efficient at the cost of computation time
-- *Finite automata for infinite sets*
+- *BDDs*, which are obtained from a *boolean decision tree* and permit boolean functional equivalence for efficient checking [28]
+- *Propositional logic for finite sets*, which are more memory efficient at the cost of computation time [29]
+- *Finite automata for infinite sets* [30]
 
-Another alternative is *bounded model checking* (BMC). This technique involves "unwinding" the model under verification *k* times together with a property to form a propositional formula that is then passed to a SAT solver. The result of the test is viewed as a *pass* if and only if there is a trace of length *k* that refutes the property. The result is viewed as *inconclusive* if the formula is unsatisfiable. The way BMC is implemented is to treat the entire program as one transition relation by adding a program counter variable to the model. One transition of the design corresponds to one basic block of the program. In each transition, the next program location is computed by following the control flow graph (CFG) of the program. The basic block is converted into a formula by transforming it into Static Single Assignment (SSA) form. The arithmetic operators in the basic block are converted into simplistic circuit equivalents. Arrays and pointers are treated as in the case of memories in hardware verification: a large case split over the possible values of the address is encoded.
+Another alternative is *bounded model checking* (BMC). This technique involves "unwinding" the model under verification *k* times together with a property to form a propositional formula that is then passed to a SAT solver [25]. The result of the test is viewed as a *pass* if and only if there is a trace of length *k* that refutes the property. The result is viewed as *inconclusive* if the formula is unsatisfiable.
 
-There is a level of care to be given to the models themselves. We say that a model of a protocol is a *symbolic model*, often called the Dolev-Yao Model is the cryptographic primitives are represented by function symbols considered as black-boxes, messages are terms on these primitives, the adversary is restricted to using these primitives, and the model assumes perfect cryptography. On the other hand, in the *computational model* messages are bitstrings, the cryptographic primitives are functions from bitstrings to bitstrings, the adversary is a probabilistic Turing machine, and a security property is considered to hold when the probability that it does not hold is negligible in the security parameter.
+There is a level of care to be given to the models themselves. We say that a model of a protocol is a *symbolic model*, often called the Dolev-Yao Model [31], is the cryptographic primitives are represented by function symbols considered as black-boxes, messages are terms on these primitives, the adversary is restricted to using these primitives, and the model assumes perfect cryptography. On the other hand, in the *computational model* messages are bitstrings, the cryptographic primitives are functions from bitstrings to bitstrings, the adversary is a probabilistic Turing machine, and a security property is considered to hold when the probability that it does not hold is negligible in the security parameter [31].
 
-Finally, we say that *trace properties* are properties that can be defined on each execution trace of the protocol, and *equivalence properties* mean that an adversary cannot distinguish two processes.
+Finally, we say that *trace properties* are properties that can be defined on each execution trace of the protocol, and *equivalence properties* mean that an adversary cannot distinguish two processes [31].
 
-
-### III. Methodology and Result Classification 
-
-We shall be looking at the following approaches:
-- "Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations" [Brubaker]  (*Frankencerts*)
-- "Finite-State Analysis of SSL 3.0" [Mitchell]  (*Finite-State Analysis of SSL 3.0*)
-- "Not-quite-so broken TLS: lessons in re-engineering a security protocol specification and implementation" [Kaloper-Mersinjack]  (*Not-quite-so-broken TLS*)
-- "A Messy State of the Union: Taming the Composite State Machines of TLS" [Beurdouche]  (*A Messy State of the Union*)
-- "Systematic Fuzzing and Testing of TLS Libraries" [Somorovsky]  (*Systematic Fuzzing and Testing of TLS Libraries*)
-- "Protocol state fuzzing of TLS implementations" [Ruiter]  (*Protocol state fuzzing of TLS implementations*)
-- "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing" [Walz]  (*Testing Embedded TLS Implementations*)
-
-#### Framework for Methodology and Result Classification
+### III. Framework for Methodology and Result Classification 
 
 In order to classify methodologies, we shall be using the following approach, first we will determine the *type* of testing, which will be one of:
 - *Dynamic Testing*
@@ -300,7 +287,17 @@ To summarize, each methodology shall be classified using these metrics:
 2. Form of Vulnerabilities
 3. Threat Assessment
 
-#### Classifications
+### IV. Classifications
+
+We shall be looking at the following 'representative approaches' that were chosen because they present an archetype of a particular approach. We tried to ensure that we don't duplicate coverage of similar approaches:
+
+- "Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations" [32]  (*Frankencerts*)
+- "Finite-State Analysis of SSL 3.0" [33]  (*Finite-State Analysis of SSL 3.0*)
+- "Not-quite-so broken TLS: lessons in re-engineering a security protocol specification and implementation" [34]  (*Not-quite-so-broken TLS*)
+- "A Messy State of the Union: Taming the Composite State Machines of TLS" [35]  (*A Messy State of the Union*)
+- "Systematic Fuzzing and Testing of TLS Libraries" [36]  (*Systematic Fuzzing and Testing of TLS Libraries*)
+- "Protocol state fuzzing of TLS implementations" [37]  (*Protocol state fuzzing of TLS implementations*)
+- "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing" [38]  (*Testing Embedded TLS Implementations*)
 
 *A. Frankencerts*
 
@@ -882,7 +879,6 @@ N/A
 ##### 4. Threat Assessment
 *Manually*
 
-
 ### V. Comparison of Methodologies and Results
 
 
@@ -925,7 +921,58 @@ Body of Knowledge Version 3.0 SWEBOK. IEEE, 2014.
 
 [12] OWASP Testing Guide
 
+[13] https://hpbn.co/transport-layer-security-tls/
+
+[14] RFC 5280
+
+[15] P. Ammann and J. Offutt. Introduction to Software Testing. Cambridge University Press, Cambridge, UK, 2008.
+
+[16] ISO/IEC. Information technology – open systems interconnection – conformance testing methodology and framework, 1994. International ISO/IEC multi–part standard No. 9646.
+
+[17] Felderer, Michael et al. Security Testing: A Survey.
+
+[18] Schulzrinne, Henning et al. Security testing of SIP implementations.
+
+[19] Committee on National Security Systems. 4009, ”National Information Assurance Glossary”. Technical report, Committee on National Security Systems, 2010.
+
+[20] IEEE. IEEE Standard for Software and System Test Documentation. IEEE Std 829-2008, 2008.
+
+[21] K. Scarfone, M. Souppaya, A. Cody, and A. Orebaugh. Technical Guide to Information Security Testing and Assessment. Special Publication 800-115, National Institute of Standards and Technology (NIST), 2008.
+
+[22] H. Shahriar and M. Zulkernine. Automatic testing of program security vulnerabilities. In Computer Software and Applications Conference, 2009. COMPSAC’09. 33rd Annual IEEE International, volume 2, pages 550–555. IEEE, 2009.
+
+[23] D. Yang, Y. Zhang, and Q. Liu. Blendfuzz: A model-based framework for fuzz testing programs with grammatical inputs. In G. Min, Y. Wu, L. C. Liu, X. Jin, S. A. Jarvis, and A. Y. Al-Dubai, editors, 11th IEEE International Conference on Trust, Security and Privacy in Computing and Communications, TrustCom 2012, Liverpool, United Kingdom, June 25-27, 2012, pages 1070–1076. IEEE Computer Society, 2012.
+
+[24] S. Bekrar, C. Bekrar, R. Groz, and L. Mounier. A taint based approach for smart fuzzing. In G. Antoniol, A. Bertolino, and Y. Labiche, editors, 2012 IEEE Fifth International Conference on Software Testing, Verification and Validation, Montreal, QC, Canada, April 17-21, 2012, pages 818–825. IEEE, 2012.
+
+[25] D’Silva, Vijay et Al. A Survey of Automated Techniques for Formal Software Verification. Transactions on CAD.
+
+[26] E. M. Clarke and E. A. Emerson. Design and synthesis of synchronization skeletons using branching-time temporal logic. In Logic of Programs, volume 131 of LNCS, pages 52–71. Springer, 1981.
+
+[27] S. Demri, F. Laroussinie, and P. Schnoebelen. A parametric analysis of the state-explosion problem in model checking. Compututer and System Sciences, 72(4):547–575, 2006.
+
+[28] R. E. Bryant. Graph-based algorithms for Boolean function manipulation. IEEE Transactions on Computers, 35(8):677–691, 1986.
+
+[29] J. R. Buchi. Regular canonical systems. Archive for Mathematical Logic, 6(3-4):91, April 1964.
+
+[30] Y. Kesten, O. Maler, M. Marcus, A. Pnueli, and E. Shahar. Symbolic model checking with rich ssertional languages. In Computer Aided
+Verification (CAV), volume 1254 of LNCS, pages 424–435. Springer, 1997.
+
+[31] Blanchet, Bruno. Security Protocol Verification: Symbolic and Computational Models.
+
+[32] Chad Brubaker, Suman Jana, Baishakhi Ray, Sarfraz Khurshid, and Vitaly Shmatikov. 2014. Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations. In Proceedings of the 2014 IEEE Symposium on Security and Privacy (SP '14). IEEE Computer Society, Washington, DC, USA, 114-129.
+
+[33] John C. Mitchell, Vitaly Shmatikov, and Ulrich Stern. 1998. Finite-state analysis of SSL 3.0. In Proceedings of the 7th conference on USENIX Security Symposium - Volume 7 (SSYM'98), Vol. 7. USENIX Association, Berkeley, CA, USA, 16-16.
+
+[34] David Kaloper-Meršinjak, Hannes Mehnert, Anil Madhavapeddy, and Peter Sewell. 2015. Not-quite-so-broken TLS: lessons in re-engineering a security protocol specification and implementation. In Proceedings of the 24th USENIX Conference on Security Symposium (SEC'15), Jaeyeon Jung (Ed.). USENIX Association, Berkeley, CA, USA, 223-238.
+
+[35] B. Beurdouche et al., "A Messy State of the Union: Taming the Composite State Machines of TLS," 2015 IEEE Symposium on Security and Privacy, San Jose, CA, 2015, pp. 535-552.
+
+[36] Juraj Somorovsky. 2016. Systematic Fuzzing and Testing of TLS Libraries. In Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security (CCS '16). ACM, New York, NY, USA, 1492-1504
+
+[37] Joeri de Ruiter and Erik Poll. Protocol State Fuzzing of TLS Implementations. 24th USENIX Security Symposium (USENIX Security 15). 2015. 978-1-931971-232. Washington, D.C. 193--206.
+
+[38] Walz, Andreas, and Axel Sikora. "Testing embedded TLS implementations using fuzzing techniques and differential testing." BW-CAR SINCOM (2015): 36.
 
 
-Information from [Survey of Security Testing](https://blogs.uni-paderborn.de/sse/files/2015/08/book_chapter_sectesting.pdf?file=2015/08/book_chapter_sectesting.pdf)
 
