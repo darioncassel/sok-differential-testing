@@ -291,13 +291,13 @@ To summarize, each methodology shall be classified using these metrics:
 
 We shall be looking at the following 'representative approaches' that were chosen because they present an archetype of a particular approach. We tried to ensure that we don't duplicate coverage of similar approaches:
 
-- "Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations" [32]  (*Frankencerts*)
-- "Finite-State Analysis of SSL 3.0" [33]  (*Finite-State Analysis of SSL 3.0*)
-- "Not-quite-so broken TLS: lessons in re-engineering a security protocol specification and implementation" [34]  (*Not-quite-so-broken TLS*)
-- "A Messy State of the Union: Taming the Composite State Machines of TLS" [35]  (*A Messy State of the Union*)
-- "Systematic Fuzzing and Testing of TLS Libraries" [36]  (*Systematic Fuzzing and Testing of TLS Libraries*)
-- "Protocol state fuzzing of TLS implementations" [37]  (*Protocol state fuzzing of TLS implementations*)
-- "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing" [38]  (*Testing Embedded TLS Implementations*)
+- "Using Frankencerts for Automated Adversarial Testing of Certificate Validation in SSL/TLS Implementations"   (*Frankencerts*) [32]
+- "Finite-State Analysis of SSL 3.0"   (*Finite-State Analysis of SSL 3.0*) [33]
+- "Not-quite-so broken TLS: lessons in re-engineering a security protocol specification and implementation"   (*Not-quite-so-broken TLS*) [34]
+- "A Messy State of the Union: Taming the Composite State Machines of TLS"  (*A Messy State of the Union*) [35]
+- "Systematic Fuzzing and Testing of TLS Libraries"  (*Systematic Fuzzing and Testing of TLS Libraries*) [36]
+- "Protocol state fuzzing of TLS implementations"   (*Protocol state fuzzing of TLS implementations*) [37]
+- "Testing Embedded TLS Implementations Using Fuzzing Techniques and Differential Testing"  (*Testing Embedded TLS Implementations*) [38]
 
 *A. Frankencerts*
 
