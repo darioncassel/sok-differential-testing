@@ -1,4 +1,4 @@
-<style TYPE="text/css">
+<style type="text/css">
 code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
 </style>
 <script type="text/x-mathjax-config">
@@ -16,6 +16,9 @@ MathJax.Hub.Queue(function() {
 });
 </script>
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link href="css/zoom.css" rel="stylesheet">
+<script src="js/zoom.js"></script>
+<script src="js/transition.js"></script>
 
 
 ## SoK: SSL/TLS Security Protocol Testing and Verification
@@ -57,7 +60,7 @@ The TLS protocol is designed to provide encryption, authentication, and data int
 
 Let us consider two parties, Alice and Bob. The primary goal of the handshake is to provide privacy and reliability for Alice and Bob's communications through the establishment of secret keys. 
 
-<center><img src="https://hpbn.co/assets/diagrams/b83b75dbbf5b7e4be31c8000f91fc1a8.svg" alt="TLS Handshake" style="width:800px;"/><br>
+<center><img src="https://hpbn.co/assets/diagrams/b83b75dbbf5b7e4be31c8000f91fc1a8.svg" alt="TLS Handshake" style="width:800px;" data-action="zoom"/><br>
 <sup>Fig. 1: TLS Handshake [13] </sup></center>
 
 At a fundamental level, the handshake consists of three messages. The first is the *ClientHello* message with which Alice initiates the protocol, transmits her SSL/TLS version number and sends a set of cryptographic algorithms she supports called the *ciphersuite*.
@@ -72,7 +75,7 @@ It should be noted that SSL 3.0 onwards supports *session resumption* [33]. Duri
 
 X.509 certificate validation is perhaps the most complex piece of the TLS handshake protocol. It involves the use of a transitive process called *chain of trust verification*. Each SSL/TLS client trusts a certain number of certificate authorities (CAs) whose X.509 certificates are usually included with the client's Operating System or browser [32]. This is considered to be the client's *root of trust*.
 
-<center><img src="https://hpbn.co/assets/diagrams/bb75b8bd469ce5b703b76abb7042e978.svg" alt="Chain of Trust" style="width:800px;"/><br>
+<center><img src="https://hpbn.co/assets/diagrams/bb75b8bd469ce5b703b76abb7042e978.svg" alt="Chain of Trust" style="width:800px;" data-action="zoom"/><br>
 <sup>Certificate Chain of Trust</sup></center>
 
 Each X.509 certificate that the client receives from a server it is attempting to connect with has an *issuer* field that contains the name of the certificate authority (CA) that issued the certificate. This server certificate is required to be accompanied by the certificate of the issuing CA, and if that issuer is not a *root CA*, then all of the certificates up to the root CA need to be included. It is this chain of certificates going from a server certificate to a root CA, the chain of trust, that needs to be validated by the client. Due to the complexity of the X.509 certificates themselves, this is not a simple task. Some of the checks involved in validating the chain are [14]:
@@ -88,7 +91,7 @@ It is due to this complexity that the certificate validation phase of the TLS pr
 
 Similarly to TCP or IP, data that is exchanged within a TLS session is framed using a protocol. The record protocol allows for the identification of different types of messages, either handshake, alert, or data, via the *Content Type* field, and includes authentication of the encrypted data via a *message authentication code* (MAC).
 
-<center><img src="https://hpbn.co/assets/diagrams/4603275cd98c93aeb8c46b1b1afa0ba6.svg" alt="TLS Record Structure" style="width:800px;"/><br>
+<center><img src="https://hpbn.co/assets/diagrams/4603275cd98c93aeb8c46b1b1afa0ba6.svg" alt="TLS Record Structure" style="width:800px;" data-action="zoom"/><br>
 <sup>Fig. 2: TLS Record Structure [13]</sup></center>
 
 The process for delivering application data using the record protocol is that the data is divided into blocks of a maximum size of 16 KB. A MAC or HMAC is then added to each block and the data is encrypted using the ciphersuite that was negotiated during the handshake. Depending on the ciphersuite being used, padding might be added to the data. The reverse of this process is used by the client when it receives a frame of data.
@@ -848,14 +851,14 @@ We find a similar trend in the specification of the test oracle; the majority of
 <center><img src="img/exit_criteria.png" style="width:350px;"/><br>
 <sup>Fig. 7: Exit Criteria</sup></center>
 
-In the case of the exit criteria, we find that the majority of approaches use either manual or exhaustion, and only one approach uses coverage. We cannot recommend the practice of using a manual exit critera for two reasons:
+In the case of the exit criteria, we find that the majority of approaches use either manual or exhaustion, and only one approach uses coverage. We cannot recommend the practice of using a manual exit criteria for two reasons:
 
 - It does not support reproducible work; unless the testing is done in a well-specified, deterministic fashion, there is no guarantee that two researchers using the same stopping point will produce the same results.
 - The stopping point is usually arbitrary and thus not well-calibrated to any measured metric.
 
 The use of exhaustion as a stopping criteria is more justifiable, but it also has similar issues. With exhaustion there is still no calibration or way to measure progress in testing. There is some hope that exhaustion will uncover a large amount of faults, however, again, there is no way to measure what has or has not been accomplished. There is no way to know during the course of testing whether a particular vulnerability has already been captured by a one exceptional element that that is replicated in later tests. Thus there can be both unnecessary duplication of tests and flaws easily go missed.
 
-Coverage is the only metric that can prevent this issue because coverage ensures that all of the revelant paths through the program have been tested once. Within the approaches that were surveyed here, coverage was used only in a static setting, but coverage can be produced in a dynamic setting as well with proper instrumentation of the SUT.
+Coverage is the only metric that can prevent this issue because coverage ensures that all of the relevant paths through the program have been tested once. Within the approaches that were surveyed here, coverage was used only in a static setting, but coverage can be produced in a dynamic setting as well with proper instrumentation of the SUT.
 
 <center><img src="img/chart_dynamic.png" style="width:800px;"/><br>
 <sup>Fig. 8: Dynamic Properties Classification</sup></center>
@@ -867,7 +870,7 @@ For the injection vector we find that the methodologies were split 50-50 on whet
 <center><img src="img/instrumentation.png" style="width:350px;"/><br>
 <sup>Fig. 9: Instrumentation</sup></center>
 
-With the instrumentation, we find that most dynamic testing approaches stuck to in-band instrumentation, which means monitoring the SUT from its output or exception traces, rather than out-of-band instrumentation. For the two approaches that used out-of-band instrumentation, is is clear why that was the choice. For penetration testing of nqsb-TLS, it would make sense for the TLS server to be monitored from "outside"; the attackers were third-party and thus their communication with the nqsb-TLS was not directly monitorable. For *Systematic Fuzzing and Testing of TLS Libraries* the authors chose to uses tools like AddressSanitizer to monitor TLS implementations for memory leakages. Interestingly, we find that there is no correlation between the injection vector and the instrumentation; an approach using out-of-band instrumentation was equally likely to use server interaction or simulated interaction.
+With the instrumentation, we find that most dynamic testing approaches stuck to in-band instrumentation, which means monitoring the SUT from its output or exception traces, rather than out-of-band instrumentation. For the two approaches that used out-of-band instrumentation, is is clear why that was the choice. For penetration testing of nqsb-TLS, it would make sense for the TLS server to be monitored from "outside"; the attackers were third-party and thus their communication with the nqsb-TLS was not directly monitor-able. For *Systematic Fuzzing and Testing of TLS Libraries* the authors chose to uses tools like AddressSanitizer to monitor TLS implementations for memory leakages. Interestingly, we find that there is no correlation between the injection vector and the instrumentation; an approach using out-of-band instrumentation was equally likely to use server interaction or simulated interaction.
 
 <center><img src="img/dynamic_testing_type.png" style="width:400px;"/><br>
 <sup>Fig. 10: Dynamic Testing Type</sup></center>
@@ -879,7 +882,7 @@ Within the fuzzing approaches we find that the majority use mutation-based fuzzi
 <center><img src="img/chart_static.png" style="width:800px;"/><br>
 <sup>Fig. 11: Static Properties Classification</sup></center>
 
-In the static properties classification, the main features are the type and the way the model was generated. For the type of the static testing we say that only two of the five listed types wer covered. The two types that were captured by the classified methodologies were symbolic model checking and manual model checking. Thus all of the static testing approaches used some form of model-checking. Of the two forms of model-checkign used, we believe that symbolic model checking is much preferable to manual model checking for the same reasons that coverage is preferable to exhaustion or manual exit criteria; manual model checking is is fallible as the researchers who are using it and provides no guarantees in terms what will or will not be covered by the testing. 
+In the static properties classification, the main features are the type and the way the model was generated. For the type of the static testing we say that only two of the five listed types wer covered. The two types that were captured by the classified methodologies were symbolic model checking and manual model checking. Thus all of the static testing approaches used some form of model-checking. Of the two forms of model-checking used, we believe that symbolic model checking is much preferable to manual model checking for the same reasons that coverage is preferable to exhaustion or manual exit criteria; manual model checking is is fallible as the researchers who are using it and provides no guarantees in terms what will or will not be covered by the testing. 
 
 Other than model-checking, we see that some form of code analysis could have been done, however no methodology that was classified used either manual or automated code analysis. This is unfortunate because static code analysis has the opportunity to provide direct source code correspondences for faults discovered and thus can cut down researcher time spent on classifying oracle results.
 
@@ -899,7 +902,7 @@ Interestingly there is no correlation between whether an approach uses static te
 <center><img src="img/missed_bugs.png" style="width:350px;"/><br>
 <sup>Fig. 14: Missed Bugs?</sup></center>
 
-For missed bugs, we see quite a different situation; only one approach was not vulnerable to missed bugs, *A Finite State Analysis of SSL 3.0*. There is a clear reason for this; *A Finite State Analysis of SSL 3.0* was the only approach that used coverage as its exit critera, thus only this approach could claim that all of the possible execution paths were checked. This reinforces the previous claim about the importance of principled, coverage-based exit critera; without that it will be quite difficult to execute testing that does not miss *something*.
+For missed bugs, we see quite a different situation; only one approach was not vulnerable to missed bugs, *A Finite State Analysis of SSL 3.0*. There is a clear reason for this; *A Finite State Analysis of SSL 3.0* was the only approach that used coverage as its exit criteria, thus only this approach could claim that all of the possible execution paths were checked. This reinforces the previous claim about the importance of principled, coverage-based exit criteria; without that it will be quite difficult to execute testing that does not miss *something*.
 
 <center><img src="img/form_vulns.png" style="width:400px;"/><br>
 <sup>Fig. 15: Form of Vulnerabilities</sup></center>
