@@ -520,7 +520,7 @@ The finite state analysis tool Mur$\phi$ presents an *execution trace*, which in
 
 ##### 4. Test Oracle
 
-The test oracle in this case is a *specification* of invariants. 
+The test oracle in this case is a *specification* of invariants.
 
 ##### 5. Oracle Specification
 
@@ -530,22 +530,11 @@ The form of the specification is a set of Boolean conditions that have to be tru
 
 The exit criteria was *coverage*, the Mur$\phi$ tool exhaustively tests all possible interleavings of protocol and intruder actions to ensure that a set of correctness conditions is satisfied in all cases.
 
-*Dynamic Testing Properties*
-
-##### 1. Type
-N/A
-##### 2. In-test Accessibility
-N/A
-##### 3. Injection Vector
-N/A
-##### 3. Instrumentation
-N/A
-
 *Static Testing Properties*
 
 ##### 1. Type
 
-*Symbolic Model-checking*
+The finite-state analysis tool leveraged *Symbolic Model-checking*.
 
 ##### 2. Model Generation
 
@@ -618,16 +607,6 @@ The injection vector is *simulated interaction*; FlexTLS simulates a clients con
 
 The instrumentation for the dynamic testing is *in-band*, the authors expect to get an error message from the implementation.
 
-*Static Testing Properties*
-
-##### 1. Type
-
-N/A
-
-##### 2. Model Generation
-
-N/A
-
 *Result Properties* 
 
 ##### 1. Spurious Warnings?
@@ -636,15 +615,15 @@ The authors attempt to reduce false positives by using verified messaging librar
 
 ##### 2. Missed Bugs?
 
-*Vulnerable*
+Since this is a form of dynamic testing without a formal notion of coverage; this method was *vulnerable* to missed bugs.
 
 ##### 3. Form of Vulnerabilities
 
-The form of vulnerabilities is *exceptional traces*, errors from the SUT.
+The form of vulnerabilities is *exceptional traces*, errors from the SUT as captured by the instrumentation.
 
 ##### 4. Threat Assessment
 
-The threat assessment is done *manually*, though the manual code-based analysis.
+The threat assessment had to be done *manually*, though the manual code-based analysis. After the potential vulnerabilities exceptional traces were collected, the authors had to go through the faulting implementation(s) to discover the root cause of the problem.
 
 
 *E. Systematic Fuzzing and Testing of TLS Libraries*
@@ -657,15 +636,15 @@ The type of testing done is *dynamic testing*.
 
 ##### 2. Test Scope
 
-The test scope is *system testing* since the SUT is an entire particular TLS implementation.
+The test scope is *system testing* since the SUT is an entire particular TLS implementation, OpenSSL.
 
 ##### 3. Exceptional Element
 
-The exceptional element of both stages is an *exceptional input* of the form of a protocol flow.
+The exceptional element of both stages is an *exceptional input* of the form of a protocol flow. The authors used their framework to construct sequences of messages that caused the implementation to fail.
 
 ##### 4. Test Oracle
 
-The test oracle in this case is *manual inspection* of the testing data.
+The test oracle in this case is *manual inspection* of the testing data; the TLS-Attacker framework stores exceptional protocols for later analysis by the authors.
 
 ##### 5. Specification
 
@@ -673,7 +652,7 @@ The specification is *manually determined* based on the authors' knowledge of th
 
 ##### 6. Exit Criteria
 
-The exit criteria is *manual*. A user of the testing framework configures the number of fuzzing attempts.
+The exit criteria is *manual*. A user of the testing framework decides upon the the number of fuzzing attempts.
 
 *Dynamic Testing Properties*
 
@@ -687,31 +666,21 @@ The accessibility is *black-box*, the source code of implementations is not insp
 
 ##### 3. Injection Vector
 
-The injection vector is a *simulated server*; the framework being used.
+The injection vector is a *simulated server*, the framework being used.
 
 ##### 4. Instrumentation
 
 *Out-of-band* instrumentation is used. In order to detect buffer boundary violations or other memory corruptions, the authors utilize AddressSanitizer which monitors the program at runtime for memory errors. The authors also detect if an invalid protocol flow by using a TLS context analyzer. 
 
-*Static Testing Properties*
-
-##### 1. Type
-
-N/A
-
-##### 2. Model Generation
-
-N/A
-
 *Result Properties*
 
 ##### 1. Spurious Warnings
 
-This method is *vulnerable* to false positives.
+This method is not *vulnerable* to false positives since some of the exceptional cases are not directly related to protocol bugs and may be the result of other errors.
 
 ##### 2. Missed Bugs
 
-*Vulnerable*
+Since this approach is in no sense exhaustive, it is *vulnerable* to missed bugs.
 
 ##### 3. Form of Vulnerabilities
 
@@ -736,50 +705,39 @@ The scope of the testing is *component testing*. Testing is done over models gen
 
 ##### 3. Exceptional Element
 
-The exceptional element is not applicable as the model checking is done manually.
+The exceptional element is not applicable as checking of the model was done though manual inspection.
 
 ##### 4. Test Oracle
 
-The test oracle in this case is *manual inspection* of the generated models.
+The test oracle in this case is *manual inspection* of the generated models; the authors inspected the generated models to see whether they could fine superfluous or irregular states or transitions in the model.
 
 ##### 5. Specification
 
-The specification is not applicable.
+The specification is not applicable since the test oracle was manual inspection.
 
 ##### 6. Exit Criteria
 
 The exit criteria for the testing is *manual*.
 
-*Dynamic Testing Properties*
-
-##### 1. Type
-N/A
-##### 2. In-test Accessibility
-N/A
-##### 3. Injection Vector
-N/A
-##### 4. Instrumentation
-N/A
-
 *Static Testing Properties*
 
 ##### 1. Type
 
-*Manual*
+The checking of the model was done *manually*.
 
 ##### 2. Model Generation
 
-*Automatic Generation*
+The model was produced through *automatic generation*; the authors used state machine learning to infer the state machines from protocol implementations.
 
 *Result Properties*
 
 ##### 1. Spurious Warnings?
 
-This methodology is *vulnerable* to false positives since any misbehavior must be inspected learning to some benign cases. 
+This methodology is *vulnerable* to false positives since any misbehavior is considered to warrant inspection.
 
 ##### 2. Missed Bugs?
 
-*Vulnerable*
+Since the models that are generated are not necessarily complete, and the inspection of the models is done manually, it cannot be guaranteed that this method is safe from missed bugs. Thus it is *vulnerable* to missed bugs.
 
 ##### 3. Form of Vulnerabilities
 
@@ -798,63 +756,63 @@ The authors present a methodology for the systematic testing of TLS implementati
 
 ##### 1. Type
 
-*Dynamic testing*
+The essence of the approach is *dynamic testing*.
 
 ##### 2. Test Scope
 
-*System testing*
+The authors strove to extend the results of *Frankencerts* to test more than just certificate validation; they attempted to conduct *system testing*.
 
 ##### 3. Exceptional Element
 
-*Exceptional input*
+The exceptional element is in the form of *exceptional input* that is given to the SUT through its regular input channel.
 
 ##### 4. Test Oracle
 
-The approach uses a form of differential testing with structurally different TLS implementations of different origins. Thus, the test oracle is form of *reference implementation*.
+The approach uses a form of differential testing with structurally different TLS implementations of different origins. Thus, the test oracle is form of *reference implementation* akin to what is done with *Frankencerts*.
 
 ##### 5. Oracle Specification
 
-Since the oracle is not one specific reference implementation, it is not formally specified or generated.
+Since the oracle is not one specific reference implementation, it is not formally specified or generated. The oracle is discrepancies amongst the responses and the content of the responses sent by the different TLS implementations under test.
 
 ##### 6. Exit Criteria
 
-*Exhaustion*
+The exit criteria is *exhaustion* of the test cases.
 
 *Dynamic Testing*
 
 ##### 1. Type
 
-*Mutation-based fuzzing*
+The form of fuzzing conducted is *mutation-based fuzzing* of sequences of messages fed to the SUT.
 
 ##### 2. In-test Accessibility
 
-*Black-box*
+During the testing the artifacts of development are not available to the tests, this this is a *black-box* approach.
 
 ##### 3. Injection Vector
 
-*Simulated interaction*
+The injection vector is *simulated interaction*; sequences of messages are fed to the SUT.
 
 ##### 4. Instrumentation
 
-*In-band*
-
-*Static Testing*
-
-##### 1. Type
-N/A
-##### 2. Model Generation
-N/A
+The instrumentation is *in-band*; the type of response received from the TLS implementations are collected and compared for differences.
 
 *Results*
 
 ##### 1. Spurious Warnings?
-*Vulnerable*
+
+This approach is *vulnerable* to spurious warnings; not every message flow sent to the SUT is guaranteed to be valid and thus flows that are not accounted for by the TLS specification might be sent, leading to undefined but not necessarily incorrect behavior.
+
 ##### 2. Missed Bugs?
-*Vulnerable*
+
+The approach is *vulnerable* to missed bugs since the exit criteria is exhaustion of the test cases rather than some metric of coverage.
+
 ##### 3. Form of Vulnerabilities
-*Exceptional traces*
+
+The form of the vulnerabilities is *exceptional traces* in the form of responses sent by the TLS implementations.
+
 ##### 4. Threat Assessment
-*Manually*
+
+The threat assessment must be done *manually*; this approach, like *Frankencerts* only uncovers discrepancies and does not provide any means for their classification.
 
 ### V. Comparison of Methodologies and Results
 
