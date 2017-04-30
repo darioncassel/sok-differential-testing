@@ -1,28 +1,8 @@
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+
 <style type="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+    code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
 </style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-    }
-});
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <link href="css/zoom.css" rel="stylesheet">
-<script src="js/zoom.min.js"></script>
-<script src="js/transition.js"></script>
 
 
 ## SoK: SSL/TLS Security Protocol Testing and Verification
@@ -64,7 +44,7 @@ The TLS protocol is designed to provide encryption, authentication, and data int
 
 Let us consider two parties, Alice and Bob. The primary goal of the handshake is to provide privacy and reliability for Alice and Bob's communications through the establishment of secret keys. 
 
-<center><img src="https://hpbn.co/assets/diagrams/b83b75dbbf5b7e4be31c8000f91fc1a8.svg" alt="TLS Handshake" style="width:800px;" data-action="zoom"/><br>
+<center><img src="https://hpbn.co/assets/diagrams/b83b75dbbf5b7e4be31c8000f91fc1a8.svg" alt="TLS Handshake" style="width:800px;"/><br>
 <sup>Fig. 1: TLS Handshake [13] </sup></center>
 
 At a fundamental level, the handshake consists of three messages. The first is the *ClientHello* message with which Alice initiates the protocol, transmits her SSL/TLS version number and sends a set of cryptographic algorithms she supports called the *ciphersuite*.
@@ -79,7 +59,7 @@ It should be noted that SSL 3.0 onwards supports *session resumption* [33]. Duri
 
 X.509 certificate validation is perhaps the most complex piece of the TLS handshake protocol. It involves the use of a transitive process called *chain of trust verification*. Each SSL/TLS client trusts a certain number of certificate authorities (CAs) whose X.509 certificates are usually included with the client's Operating System or browser [32]. This is considered to be the client's *root of trust*.
 
-<center><img src="https://hpbn.co/assets/diagrams/bb75b8bd469ce5b703b76abb7042e978.svg" alt="Chain of Trust" style="width:800px;" data-action="zoom"/><br>
+<center><img src="https://hpbn.co/assets/diagrams/bb75b8bd469ce5b703b76abb7042e978.svg" alt="Chain of Trust" style="width:800px;"/><br>
 <sup>Certificate Chain of Trust</sup></center>
 
 Each X.509 certificate that the client receives from a server it is attempting to connect with has an *issuer* field that contains the name of the certificate authority (CA) that issued the certificate. This server certificate is required to be accompanied by the certificate of the issuing CA, and if that issuer is not a *root CA*, then all of the certificates up to the root CA need to be included. It is this chain of certificates going from a server certificate to a root CA, the chain of trust, that needs to be validated by the client. Due to the complexity of the X.509 certificates themselves, this is not a simple task. Some of the checks involved in validating the chain are [14]:
@@ -95,7 +75,7 @@ It is due to this complexity that the certificate validation phase of the TLS pr
 
 Similarly to TCP or IP, data that is exchanged within a TLS session is framed using a protocol. The record protocol allows for the identification of different types of messages, either handshake, alert, or data, via the *Content Type* field, and includes authentication of the encrypted data via a *message authentication code* (MAC).
 
-<center><img src="https://hpbn.co/assets/diagrams/4603275cd98c93aeb8c46b1b1afa0ba6.svg" alt="TLS Record Structure" style="width:800px;" data-action="zoom"/><br>
+<center><img src="https://hpbn.co/assets/diagrams/4603275cd98c93aeb8c46b1b1afa0ba6.svg" alt="TLS Record Structure" style="width:800px;"/><br>
 <sup>Fig. 2: TLS Record Structure [13]</sup></center>
 
 The process for delivering application data using the record protocol is that the data is divided into blocks of a maximum size of 16 KB. A MAC or HMAC is then added to each block and the data is encrypted using the ciphersuite that was negotiated during the handshake. Depending on the ciphersuite being used, padding might be added to the data. The reverse of this process is used by the client when it receives a frame of data.
@@ -826,7 +806,7 @@ The threat assessment must be done *manually*; this approach, like *Frankencerts
 
 Presented below are summary tables showcasing the classification of each approach for a particular classification metric. The columns of the tables correspond to each representative approach (the column headers have a shortened name of the approach) and the rows of the tables are a particular property that an approach may or may not have. If a cell has a zero in it, this means that the approach does not exhibit this property. If a cell has a one in it, this means that the approach does exhibit that property. Finally, if a cell is blank, that means that that particular property was not applicable for the approach in question.
 
-<center><img src="img/chart_core.png" style="width:800px;"/><br>
+<center><img src="img/chart_core.png" style="width:800px;" data-action="zoom"/><br>
 <sup>Fig. 3: Core Properties Classification</sup></center>
 
 This particular table is limited to the *core properties*. In order to break down the information in this table, we shall consider several salient observations that can be drawn from the data.
@@ -864,7 +844,7 @@ The use of exhaustion as a stopping criteria is more justifiable, but it also ha
 
 Coverage is the only metric that can prevent this issue because coverage ensures that all of the relevant paths through the program have been tested once. Within the approaches that were surveyed here, coverage was used only in a static setting, but coverage can be produced in a dynamic setting as well with proper instrumentation of the SUT.
 
-<center><img src="img/chart_dynamic.png" style="width:800px;"/><br>
+<center><img src="img/chart_dynamic.png" style="width:800px;" data-action="zoom"/><br>
 <sup>Fig. 8: Dynamic Properties Classification</sup></center>
 
 This table showcases the results of methods of the *dynamic properties* classification. It is curious to note that there were no methodologies that used white-box in-test accessibility. This probably follows from the fact that all of the tested approaches used some form of fuzzing or penetration testing and none used concolic testing. 
@@ -883,7 +863,7 @@ For the dynamic testing type we see that there is a reasonable mix of approaches
 
 Within the fuzzing approaches we find that the majority use mutation-based fuzzing along the lines of the Frankencerts method. This is understandable as *Frankencerts* showed to be particularly effective and thus inspired a set of similar approaches. Of the forms of fuzzing, the least preferable is probably random fuzzing. This is because random fuzzing is inefficient. Random fuzzing uses no knowledge of the structure of the data and thus must go through a much larger test case space than, say, a mutation-based fuzzing approach in order to cover the same amount of relevant ground. Thus, we recommend that dynamic testing approaches that are using fuzzing stick to mutation-based fuzzing or generation-based fuzzing. We also recommend that concolic testing be applied to testing TLS as it might prove beneficial in terms of reducing the workload researchers have in classifying the results of a fuzzing approach.
 
-<center><img src="img/chart_static.png" style="width:800px;"/><br>
+<center><img src="img/chart_static.png" style="width:800px;" data-action="zoom"/><br>
 <sup>Fig. 11: Static Properties Classification</sup></center>
 
 In the static properties classification, the main features are the type and the way the model was generated. For the type of the static testing we say that only two of the five listed types wer covered. The two types that were captured by the classified methodologies were symbolic model checking and manual model checking. Thus all of the static testing approaches used some form of model-checking. Of the two forms of model-checking used, we believe that symbolic model checking is much preferable to manual model checking for the same reasons that coverage is preferable to exhaustion or manual exit criteria; manual model checking is is fallible as the researchers who are using it and provides no guarantees in terms what will or will not be covered by the testing. 
@@ -892,7 +872,7 @@ Other than model-checking, we see that some form of code analysis could have bee
 
 For model checking we see that there is a 50-50 split between manual and automated model checking. This fact is not necessarily quite significant though because of the small sample size. Rather, what is more salient is the fact that there *was* and approach that used automated model generation. This is because automated model generation is much preferable to manual model generation in terms of the time-savings for researchers. Moreover, automated model generation is less fallible than model generation done by researchers -- it is possible that researchers might neglect to include a particular property in their model and thus that property will go untested.
 
-<center><img src="img/chart_result.png" style="width:800px;"/><br>
+<center><img src="img/chart_result.png" style="width:800px;" data-action="zoom"/><br>
 <sup>Fig. 12: Result Properties Classification</sup></center>
 
 Looking at the result properties classification, we see a number of interesting takeaways. The first one to note is that there is a 50-50 split in the results vulnerable or not vulnerable to spurious warnings, or false positives. 
@@ -1012,4 +992,24 @@ Verification (CAV), volume 1254 of LNCS, pages 424–435. Springer, 1997.
 [38] Walz, Andreas, and Axel Sikora. "Testing embedded TLS implementations using fuzzing techniques and differential testing." BW-CAR SINCOM (2015): 36.
 
 
-
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="js/zoom.min.js"></script>
+<script src="js/transition.js"></script>
