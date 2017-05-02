@@ -44,7 +44,7 @@ The TLS protocol is designed to provide encryption, authentication, and data int
 
 Let us consider two parties, Alice and Bob. The primary goal of the handshake is to provide privacy and reliability for Alice and Bob's communications through the establishment of secret keys. 
 
-<center><img src="https://hpbn.co/assets/diagrams/b83b75dbbf5b7e4be31c8000f91fc1a8.svg" alt="TLS Handshake" style="width:800px;"/><br>
+<center><img src="img/tls_handshake.svg" alt="TLS Handshake" style="width:800px;"/><br>
 <sup>Fig. 1: TLS Handshake [13] </sup></center>
 
 At a fundamental level, the handshake consists of three messages. The first is the *ClientHello* message with which Alice initiates the protocol, transmits her SSL/TLS version number and sends a set of cryptographic algorithms she supports called the *ciphersuite*.
@@ -59,8 +59,8 @@ It should be noted that SSL 3.0 onwards supports *session resumption* [33]. Duri
 
 X.509 certificate validation is perhaps the most complex piece of the TLS handshake protocol. It involves the use of a transitive process called *chain of trust verification*. Each SSL/TLS client trusts a certain number of certificate authorities (CAs) whose X.509 certificates are usually included with the client's Operating System or browser [32]. This is considered to be the client's *root of trust*.
 
-<center><img src="https://hpbn.co/assets/diagrams/bb75b8bd469ce5b703b76abb7042e978.svg" alt="Chain of Trust" style="width:800px;"/><br>
-<sup>Certificate Chain of Trust</sup></center>
+<center><img src="img/chain_of_trust.svg" alt="Chain of Trust" style="width:800px;"/><br>
+<sup>Fig. 2: Certificate Chain of Trust [13]</sup></center>
 
 Each X.509 certificate that the client receives from a server it is attempting to connect with has an *issuer* field that contains the name of the certificate authority (CA) that issued the certificate. This server certificate is required to be accompanied by the certificate of the issuing CA, and if that issuer is not a *root CA*, then all of the certificates up to the root CA need to be included. It is this chain of certificates going from a server certificate to a root CA, the chain of trust, that needs to be validated by the client. Due to the complexity of the X.509 certificates themselves, this is not a simple task. Some of the checks involved in validating the chain are [14]:
 
@@ -75,8 +75,8 @@ It is due to this complexity that the certificate validation phase of the TLS pr
 
 Similarly to TCP or IP, data that is exchanged within a TLS session is framed using a protocol. The record protocol allows for the identification of different types of messages, either handshake, alert, or data, via the *Content Type* field, and includes authentication of the encrypted data via a *message authentication code* (MAC).
 
-<center><img src="https://hpbn.co/assets/diagrams/4603275cd98c93aeb8c46b1b1afa0ba6.svg" alt="TLS Record Structure" style="width:800px;"/><br>
-<sup>Fig. 2: TLS Record Structure [13]</sup></center>
+<center><img src="img/record_structure.svg" alt="TLS Record Structure" style="width:800px;"/><br>
+<sup>Fig. 3: TLS Record Structure [13]</sup></center>
 
 The process for delivering application data using the record protocol is that the data is divided into blocks of a maximum size of 16 KB. A MAC or HMAC is then added to each block and the data is encrypted using the ciphersuite that was negotiated during the handshake. Depending on the ciphersuite being used, padding might be added to the data. The reverse of this process is used by the client when it receives a frame of data.
 
@@ -807,17 +807,17 @@ The threat assessment must be done *manually*; this approach, like *Frankencerts
 Presented below are summary tables showcasing the classification of each approach for a particular classification metric. The columns of the tables correspond to each representative approach (the column headers have a shortened name of the approach) and the rows of the tables are a particular property that an approach may or may not have. If a cell has a zero in it, this means that the approach does not exhibit this property. If a cell has a one in it, this means that the approach does exhibit that property. Finally, if a cell is blank, that means that that particular property was not applicable for the approach in question.
 
 <center><img src="img/chart_core.png" style="width:800px;" data-action="zoom"/><br>
-<sup>Fig. 3: Core Properties Classification</sup></center>
+<sup>Fig. 4: Core Properties Classification</sup></center>
 
 This particular table is limited to the *core properties*. In order to break down the information in this table, we shall consider several salient observations that can be drawn from the data.
 
 <center><img src="img/dynamic_vs_static.png" style="width:400px;"/><br>
-<sup>Fig. 4: Dynamic vs Static Testing</sup></center>
+<sup>Fig. 5: Dynamic vs Static Testing</sup></center>
 
 The first observation to note is that the majority of the approaches that were classified use dynamic testing instead of static testing. While this could be due to selection bias, we believe that this more strongly speaks to the difficulty of implementing static testing approaches versus using something like fuzzing or penetration testing. Building a static testing approach requires deep, domain-specific knowledge on how to build mathematically formal models of the TLS security protocol and then execute checking of these models. There seems to be a need for better tooling to aid researchers in applying static testing techniques to security protocol testing and verification.
 
 <center><img src="img/test_oracle_type.png" style="width:400px;"/><br>
-<sup>Fig. 5: Test Oracle Type</sup></center>
+<sup>Fig. 6: Test Oracle Type</sup></center>
 
 We notice a related trend in the selection of the test oracle. The majority of the classified approaches used either a reference implementation or manual inspection, rather than a specification. Although it is not bad practice to use a reference implementation, it would be more fruitful if test oracles were based on clear specifications because:
 
@@ -828,12 +828,12 @@ We notice a related trend in the selection of the test oracle. The majority of t
 What is more concerning is the use of manual inspection as the test oracle. Manual testing is not scalable -- it consumes researchers' time in a linear manner proportional to the amount of test cases. Manual testing is also as fallible as the researchers who are using it. It stands to reason that if in the original design and construction of TLS implementations flaws were introduced, then it is similarly likely that things will be missed during manual inspection.
 
 <center><img src="img/oracle_spec.png" style="width:400px;"/><br>
-<sup>Fig. 6: Oracle Specification</sup></center>
+<sup>Fig. 7: Oracle Specification</sup></center>
 
 We find a similar trend in the specification of the test oracle; the majority of teh classified approaches use a manually-determined oracle specification, whether this means that a test implementation's differential behavior had to be manually classified or the model had to be manually encoded in some model design language. In fact, we find that there was only one approach that automatically generated an oracle specification, *A Messy State of the Union*, which was automated in the sense that only valid sequences of messages were sent to the implementations under test and thus it could be known for each message flow that the expected behavior of the implementation under test should be to accept it. Thus any implementation that did not accept the message flow could be automatically classified as having failed the pieces of the TLS specification that the flow embodied.
 
 <center><img src="img/exit_criteria.png" style="width:350px;"/><br>
-<sup>Fig. 7: Exit Criteria</sup></center>
+<sup>Fig. 8: Exit Criteria</sup></center>
 
 In the case of the exit criteria, we find that the majority of approaches use either manual or exhaustion, and only one approach uses coverage. We cannot recommend the practice of using a manual exit criteria for two reasons:
 
@@ -845,26 +845,26 @@ The use of exhaustion as a stopping criteria is more justifiable, but it also ha
 Coverage is the only metric that can prevent this issue because coverage ensures that all of the relevant paths through the program have been tested once. Within the approaches that were surveyed here, coverage was used only in a static setting, but coverage can be produced in a dynamic setting as well with proper instrumentation of the SUT.
 
 <center><img src="img/chart_dynamic.png" style="width:800px;" data-action="zoom"/><br>
-<sup>Fig. 8: Dynamic Properties Classification</sup></center>
+<sup>Fig. 9: Dynamic Properties Classification</sup></center>
 
 This table showcases the results of methods of the *dynamic properties* classification. It is curious to note that there were no methodologies that used white-box in-test accessibility. This probably follows from the fact that all of the tested approaches used some form of fuzzing or penetration testing and none used concolic testing. 
 
 For the injection vector we find that the methodologies were split 50-50 on whether they used server interaction or simulated interaction. We believe that simulated interaction is the better practice in general. This is because simulated interactions can be programmability scripted and thus are carefully controlled and easily documented. Sever interactions on the other hand must be monitored in ad-hoc ways because server implementations don't automatically lend themselves to extensions for testing purposes. 
 
 <center><img src="img/instrumentation.png" style="width:350px;"/><br>
-<sup>Fig. 9: Instrumentation</sup></center>
+<sup>Fig. 10: Instrumentation</sup></center>
 
 With the instrumentation, we find that most dynamic testing approaches stuck to in-band instrumentation, which means monitoring the SUT from its output or exception traces, rather than out-of-band instrumentation. For the two approaches that used out-of-band instrumentation, is is clear why that was the choice. For penetration testing of nqsb-TLS, it would make sense for the TLS server to be monitored from "outside"; the attackers were third-party and thus their communication with the nqsb-TLS was not directly monitor-able. For *Systematic Fuzzing and Testing of TLS Libraries* the authors chose to uses tools like AddressSanitizer to monitor TLS implementations for memory leakages. Interestingly, we find that there is no correlation between the injection vector and the instrumentation; an approach using out-of-band instrumentation was equally likely to use server interaction or simulated interaction.
 
 <center><img src="img/dynamic_testing_type.png" style="width:400px;"/><br>
-<sup>Fig. 10: Dynamic Testing Type</sup></center>
+<sup>Fig. 11: Dynamic Testing Type</sup></center>
 
 For the dynamic testing type we see that there is a reasonable mix of approaches. Of course, it should be noted that except for penetration testing and concolic testing (which does not appear in the chart because no approach used it), all of these approaches are some form of fuzzing. This however does not show a lack of diversity in the data set; most dynamic testing approaches are by nature some form of fuzzing because of the broad definition and reach that fuzzing has.
 
 Within the fuzzing approaches we find that the majority use mutation-based fuzzing along the lines of the Frankencerts method. This is understandable as *Frankencerts* showed to be particularly effective and thus inspired a set of similar approaches. Of the forms of fuzzing, the least preferable is probably random fuzzing. This is because random fuzzing is inefficient. Random fuzzing uses no knowledge of the structure of the data and thus must go through a much larger test case space than, say, a mutation-based fuzzing approach in order to cover the same amount of relevant ground. Thus, we recommend that dynamic testing approaches that are using fuzzing stick to mutation-based fuzzing or generation-based fuzzing. We also recommend that concolic testing be applied to testing TLS as it might prove beneficial in terms of reducing the workload researchers have in classifying the results of a fuzzing approach.
 
 <center><img src="img/chart_static.png" style="width:800px;" data-action="zoom"/><br>
-<sup>Fig. 11: Static Properties Classification</sup></center>
+<sup>Fig. 12: Static Properties Classification</sup></center>
 
 In the static properties classification, the main features are the type and the way the model was generated. For the type of the static testing we say that only two of the five listed types wer covered. The two types that were captured by the classified methodologies were symbolic model checking and manual model checking. Thus all of the static testing approaches used some form of model-checking. Of the two forms of model-checking used, we believe that symbolic model checking is much preferable to manual model checking for the same reasons that coverage is preferable to exhaustion or manual exit criteria; manual model checking is is fallible as the researchers who are using it and provides no guarantees in terms what will or will not be covered by the testing. 
 
@@ -873,28 +873,28 @@ Other than model-checking, we see that some form of code analysis could have bee
 For model checking we see that there is a 50-50 split between manual and automated model checking. This fact is not necessarily quite significant though because of the small sample size. Rather, what is more salient is the fact that there *was* and approach that used automated model generation. This is because automated model generation is much preferable to manual model generation in terms of the time-savings for researchers. Moreover, automated model generation is less fallible than model generation done by researchers -- it is possible that researchers might neglect to include a particular property in their model and thus that property will go untested.
 
 <center><img src="img/chart_result.png" style="width:800px;" data-action="zoom"/><br>
-<sup>Fig. 12: Result Properties Classification</sup></center>
+<sup>Fig. 13: Result Properties Classification</sup></center>
 
 Looking at the result properties classification, we see a number of interesting takeaways. The first one to note is that there is a 50-50 split in the results vulnerable or not vulnerable to spurious warnings, or false positives. 
 
 
 <center><img src="img/spurious_warnings.png" style="width:350px;"/><br>
-<sup>Fig. 13: Spurious Warnings</sup></center>
+<sup>Fig. 14: Spurious Warnings</sup></center>
 
 Interestingly there is no correlation between whether an approach uses static testing or dynamic testing and is vulnerable to spurious warnings; we see that *Frankencerts*, which uses dynamic testing, is not vulnerable to spurious warnings because it uses discrepancies as its test oracle while *Protocol State Fuzzing of TLS Implementations*, which uses static testing, is vulnerable to spurious warnings. What seems to be more important than the type of testing for determining whether an approach might be vulnerable to spurious warnings is whether the approach in question has randomness or a human element affecting the test oracle. Approaches that use random fuzzing cannot guarantee that they will be testing within the TLS specification. Approaches that require a human to be the test oracle are subject to human fallibility. Ideally, of course, an approach should be as resistant to spurious warnings as possible as this constitutes a waste of researchers' time.
 
 <center><img src="img/missed_bugs.png" style="width:350px;"/><br>
-<sup>Fig. 14: Missed Bugs?</sup></center>
+<sup>Fig. 15: Missed Bugs?</sup></center>
 
 For missed bugs, we see quite a different situation; only one approach was not vulnerable to missed bugs, *A Finite State Analysis of SSL 3.0*. There is a clear reason for this; *A Finite State Analysis of SSL 3.0* was the only approach that used coverage as its exit criteria, thus only this approach could claim that all of the possible execution paths were checked. This reinforces the previous claim about the importance of principled, coverage-based exit criteria; without that it will be quite difficult to execute testing that does not miss *something*.
 
 <center><img src="img/form_vulns.png" style="width:400px;"/><br>
-<sup>Fig. 15: Form of Vulnerabilities</sup></center>
+<sup>Fig. 16: Form of Vulnerabilities</sup></center>
 
 For the form of vulnerabilities, we notice that exceptional traces were the most common. The second most common were counterexamples, followed by manually-inspected behavior. Source code correspondences were not the results of any of the classified approaches. We cannot recommend that any approach rely on manual inspection of the behavior of the SUT. In the case of *Protocol State Fuzzing of TLS Libraries*, the reason that manual inspection was used was because the researchers' main thrust of their work was in automating model generation. They said that they could have used some form of automated testing, but they did not because that was not the focus of their work. As usual, the reason that manually-inspected behavior is not recommended is because it is not reliable or principled. Counterexamples, which are essentially synthesized attacks on a protocol, are far more preferable because they are easy to work with, rather than exceptional traces where researchers must read through and classify the importance of the traces manually. The reason that source code correspondences were not found was because none of the approaches worked directly at the level of source code; there was no dynamic testing approach that used concolic execution, and no static testing approach that used manual or automated code analysis.
 
 <center><img src="img/threat_assess.png" style="width:400px;"/><br>
-<sup>Fig. 16: Threat Assessment Type</sup></center>
+<sup>Fig. 17: Threat Assessment Type</sup></center>
 
 Finally, for the threat assessment type, we find that the majority of approaches used manual threat assessment. This means that given the exceptional behaviors discovered during the course of testing, researchers had to manually determine the cause of the behavior, and once that cause was determined, they had to decide what potential attacks could result from that cause. There is a clear correlation between the form of vulnerabilities received and the threat assessment type; for approaches that had exceptional traces or manually-inspected behavior, they had manual threat assessment. This is because there is no direct correspondence between an exceptional trace or manually-inspected behavior and a potential attack. On the other hand, there is a direct correspondence between a counterexample form of vulnerability and an attack. As previously mentioned, a counterexample is already essentially a proposed attack and thus it the work of determining the threat assessment is already done. Thus we recommend that approaches attempt to have counterexamples as their form of vulnerability discovered in testing. This is not tied to using dynamic or static testing; of the two approaches that had counterexamples, one used dynamic testing with a reference implementation while one used symbolic model checking. Again, we believe that automating threat assessment will aid in reducing the time spent by researchers in classification-type work.
 
@@ -1010,6 +1010,6 @@ MathJax.Hub.Queue(function() {
     }
 });
 </script>
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript" src="js/mathjax.js"></script>
 <script src="js/zoom.min.js"></script>
 <script src="js/transition.js"></script>
