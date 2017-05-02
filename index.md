@@ -913,7 +913,7 @@ Finally, for the threat assessment type, we find that the majority of approaches
 
 ### X. References
 
-[1] "THE SSL PROTOCOL". Netscape Corporation. 2007.
+[1] Hickman, Kipp, "The SSL Protocol", Netscape Communications Corp., Feb 9, 1995.
 
 [2] Rescorla, Eric. SSL and TLS: Designing and Building Secure Systems. 2001.
 
@@ -921,34 +921,34 @@ Finally, for the threat assessment type, we find that the majority of approaches
 
 [4] Dierks, T. & E. Rescorla (April 2006). "The Transport Layer Security (TLS) Protocol Version 1.1, RFC 4346".
 
-[5] RFC 5246
+[5] The Transport Layer Security (TLS) Protocol Version 1.2. T. Dierks, E. Rescorla. August 2008. (RFC 5246).
 
-[6] Thai Duong & Juliano Rizzo (2011-05-13). "Here Come The ⊕ Ninjas".
+[6] Duong, Thai, and Juliano Rizzo. "Here come the⊕ ninjas." Unpublished manuscript 320 (2011).
 
-[7] Rizzo, Juliano; Duong, Thai. "The CRIME attack"
+[7] Duong, Thai, and Juliano Rizzo. "The CRIME attack." Presentation at ekoparty Security Conference. 2012.
 
-[8] Lucky Thirteen: Breaking the TLS and DTLS Record Protocols
+[8] Al Fardan, Nadhem J., and Kenneth G. Paterson. "Lucky thirteen: Breaking the TLS and DTLS record protocols." Security and Privacy (SP), 2013 IEEE Symposium on. IEEE, 2013.
 
 [9] Bodo Möller, Thai Duong & Krzysztof Kotowicz. "This POODLE Bites: Exploiting The SSL 3.0 Fallback"
 
-[10] RFC 6176
+[10] Prohibiting Secure Sockets Layer (SSL) Version 2.0. S. Turner, T. Polk. March 2011. (RFC 6176)
 
 [11] P. Bourque and R. Dupuis, editors. Guide to the Software Engineering
 Body of Knowledge Version 3.0 SWEBOK. IEEE, 2014.
 
-[12] OWASP Testing Guide
+[12] Meucci, Matteo, and Andrew Muller. "The OWASP Testing Guide 4.0." Open Web Application Security Project (2014): 30.
 
-[13] https://hpbn.co/transport-layer-security-tls/
+[13] Grigorik, Ilya. "Transport Layer Security (TLS)". Networking 101. Chapter 4. O'Reilly Publishing. 2013.
 
-[14] RFC 5280
+[14] Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile. D. Cooper, S. Santesson, S. Farrell, S. Boeyen, R. Housley, W. Polk. May 2008.
 
 [15] P. Ammann and J. Offutt. Introduction to Software Testing. Cambridge University Press, Cambridge, UK, 2008.
 
 [16] ISO/IEC. Information technology – open systems interconnection – conformance testing methodology and framework, 1994. International ISO/IEC multi–part standard No. 9646.
 
-[17] Felderer, Michael et al. Security Testing: A Survey.
+[17] Felderer, Michael, et al. "Chapter One-Security Testing: A Survey." Advances in Computers 101 (2016): 1-51.
 
-[18] Schulzrinne, Henning et al. Security testing of SIP implementations.
+[18] Wieser, Christian, Marko Laakso, and Henning Schulzrinne. "Security testing of SIP implementations." Department of Computer Science, Columbia University, NY, Tech. Rep 3 (2003).
 
 [19] Committee on National Security Systems. 4009, ”National Information Assurance Glossary”. Technical report, Committee on National Security Systems, 2010.
 
